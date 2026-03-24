@@ -1,0 +1,68 @@
+/dts-v1/;
+/plugin/;
+
+/*
+ * tmp102-overlay.dts — Device tree overlay for the TMP102 I2C temperature sensor.
+ *
+ * This overlay tells the Linux kernel that a TMP102 sensor exists at
+ * I2C address 0x48 on I2C bus 1 (the bus exposed on the Pi's 40-pin header).
+ * The "ti,tmp102" compatible string links this device description to the
+ * kernel driver that handles it. See docs/04-device-trees.md for the full
+ * explanation of how this works.
+ *
+ * Compile and install:
+ *   dtc -@ -I dts -O dtb -o tmp102-overlay.dtbo tmp102-overlay.dts
+ *   sudo cp tmp102-overlay.dtbo /boot/overlays/
+ *   echo "dtoverlay=tmp102-overlay" | sudo tee -a /boot/firmware/config.txt
+ *   sudo reboot
+ *
+ * Verify after reboot:
+ *   ls /sys/bus/i2c/devices/                        # Should show 1-0048
+ *   cat /sys/bus/i2c/devices/1-0048/of_node/compatible  # Should print ti,tmp102
+ */
+
+/ {
+    /* BCM2835 covers all Raspberry Pi SoC variants (BCM2835, BCM2836,
+     * BCM2837, BCM2711, BCM2712). This overlay is compatible with all of them. */
+    compatible = "brcm,bcm2835";
+
+    fragment@0 {
+        /*
+         * target = <&i2c1> references the i2c1 node in the Pi's base
+         * device tree. i2c1 is the I2C bus on GPIO 2 (SDA, pin 3) and
+         * GPIO 3 (SCL, pin 5) — the one accessible on the 40-pin header.
+         */
+        target = <&i2c1>;
+
+        __overlay__ {
+            /* "okay" means this bus is active and should be initialised */
+            status = "okay";
+
+            /*
+             * The node name convention for I2C devices is "type@address".
+             * "tmp102@48" means: a device of type tmp102 at hex address 48.
+             */
+            tmp102@48 {
+                /*
+                 * CRITICAL: this string must exactly match the .compatible
+                 * field in the driver's of_device_id table.
+                 *
+                 * The kernel searches all registered drivers for a match
+                 * when it processes this node. A single character difference
+                 * (wrong case, hyphen vs underscore, typo) will prevent the
+                 * driver from ever being called.
+                 */
+                compatible = "ti,tmp102";
+
+                /*
+                 * reg is the I2C address of this device on the bus.
+                 * 0x48 corresponds to ADD0 pin tied to GND.
+                 * If ADD0 is tied to VCC, use 0x49.
+                 */
+                reg = <0x48>;
+
+                status = "okay";
+            };
+        };
+    };
+};
