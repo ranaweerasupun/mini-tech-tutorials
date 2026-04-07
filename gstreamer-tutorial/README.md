@@ -20,7 +20,8 @@ By the end of this tutorial you will have a Python script that:
 - Saves the result as a playable video file
 
 Along the way you will understand *why* every line exists — not just what to
-copy and paste.
+copy and paste. 
+
 
 ---
 

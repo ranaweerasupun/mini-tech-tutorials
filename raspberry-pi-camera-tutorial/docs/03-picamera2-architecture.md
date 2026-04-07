@@ -8,28 +8,14 @@ Understanding the architecture of Picamera2 isn't strictly necessary to take pho
 
 The camera system on a Raspberry Pi is built in distinct layers, each with a clear responsibility. Think of it like an onion: your code sits on the outside, and every layer beneath it handles something more specific and lower-level. When you call `picam2.capture_file()`, that call travels down through all of these layers before any actual hardware is touched, and the resulting image data travels all the way back up.
 
-```
-┌─────────────────────────────────────────────┐
-│           YOUR PYTHON APPLICATION            │
-│  (The code you write)                        │
-└─────────────────┬───────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────┐
-│           PICAMERA2 LIBRARY                  │
-│  (Configuration, Encoders, Previews,         │
-│   Buffer management)                         │
-└─────────────────┬───────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────┐
-│           LIBCAMERA FRAMEWORK                │
-│  (Camera Manager, Pipeline Handler,          │
-│   Auto Exposure / AWB / Autofocus)           │
-└─────────────────┬───────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────┐
-│              HARDWARE                        │
-│  (Image Sensor → ISP → DMA / Memory)         │
-└─────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    A["**YOUR PYTHON APPLICATION**\nThe code you write"]
+    B["**PICAMERA2 LIBRARY**\nConfiguration, Encoders, Previews,\nBuffer management"]
+    C["**LIBCAMERA FRAMEWORK**\nCamera Manager, Pipeline Handler,\nAuto Exposure / AWB / Autofocus"]
+    D["**HARDWARE**\nImage Sensor → ISP → DMA / Memory"]
+
+    A --> B --> C --> D
 ```
 
 Let's look at each layer in detail.
@@ -164,32 +150,32 @@ Now that you understand the architecture, here are the four patterns you'll enco
 
 For those who want to understand the object-oriented structure, here is the class hierarchy showing what inherits from what:
 
-```
-object (Python base class)
-│
-├── Picamera2                    ← The main class you use directly
-│
-├── Preview (Abstract Base)
-│   ├── QtPreview
-│   │   └── QtGlPreview          ← Qt with OpenGL acceleration
-│   ├── DrmPreview               ← Headless / embedded systems
-│   └── NullPreview              ← No display (testing / CI)
-│
-├── Encoder (Abstract Base)
-│   ├── H264Encoder              ← Efficient video recording
-│   ├── MJPEGEncoder             ← Motion JPEG recording
-│   └── JpegEncoder              ← Still image encoding
-│
-├── Output (Abstract Base)
-│   ├── FileOutput               ← Write to disk
-│   ├── FfmpegOutput             ← Pipe through FFmpeg
-│   └── CircularOutput           ← Ring-buffer (e.g. dashcam style)
-│
-├── CameraConfiguration          ← Dictionary-like config object
-├── StreamConfiguration          ← Per-stream settings (libcamera binding)
-├── Transform                    ← Flip/rotation data class
-├── CompletedRequest             ← Wrapper around a captured libcamera request
-└── Metadata                     ← Dictionary subclass for capture metadata
+```mermaid
+flowchart TD
+    obj["object\nPython base class"]
+
+    obj --> Picamera2
+    obj --> Preview
+    obj --> Encoder
+    obj --> Output
+    obj --> CameraConfiguration
+    obj --> StreamConfiguration
+    obj --> Transform
+    obj --> CompletedRequest
+    obj --> Metadata
+
+    Preview["Preview (Abstract Base)"] --> QtPreview
+    Preview --> DrmPreview["DrmPreview\nHeadless / embedded systems"]
+    Preview --> NullPreview["NullPreview\nNo display (testing / CI)"]
+    QtPreview --> QtGlPreview["QtGlPreview\nQt with OpenGL acceleration"]
+
+    Encoder["Encoder (Abstract Base)"] --> H264Encoder["H264Encoder\nEfficient video recording"]
+    Encoder --> MJPEGEncoder["MJPEGEncoder\nMotion JPEG recording"]
+    Encoder --> JpegEncoder["JpegEncoder\nStill image encoding"]
+
+    Output["Output (Abstract Base)"] --> FileOutput["FileOutput\nWrite to disk"]
+    Output --> FfmpegOutput["FfmpegOutput\nPipe through FFmpeg"]
+    Output --> CircularOutput["CircularOutput\nRing-buffer (e.g. dashcam style)"]
 ```
 
 Abstract base classes (Preview, Encoder, Output) define a common interface that all subclasses must implement. This is what allows Picamera2 to treat `H264Encoder` and `MJPEGEncoder` interchangeably — they both implement the same encoder interface, just with different compression algorithms underneath.
