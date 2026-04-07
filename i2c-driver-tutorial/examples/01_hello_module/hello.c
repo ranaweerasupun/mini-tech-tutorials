@@ -1,14 +1,14 @@
 /*
  * hello.c — The simplest possible Linux kernel module.
  *
- * This module does nothing useful. Its purpose is to make the
+ * This module does nothing useful. its purpose is to make the
  * kernel module build process, the load/unload cycle, and `dmesg`
  * logging feel concrete before any driver complexity is introduced.
  *
  * Study this alongside docs/02-hello-module.md.
  *
  * Build:  make
- * Load:   sudo insmod hello.ko
+ * load :   sudo insmod hello.ko
  * Check:  dmesg | tail -5
  * Unload: sudo rmmod hello
  *
@@ -54,11 +54,11 @@ static int __init hello_init(void)
 static void __exit hello_exit(void)
 {
     pr_info("Goodbye from kernel space! Module unloaded.\n");
-    /* No return value — exit functions return void */
+    /* no return value — exit functions return void */
 }
 
 /*
- * These two macros register hello_init and hello_exit as the module's
+ * these two macros register hello_init and hello_exit as the module's
  * entry and exit points. The kernel calls hello_init when you run
  * `insmod hello.ko`, and hello_exit when you run `rmmod hello`.
  */

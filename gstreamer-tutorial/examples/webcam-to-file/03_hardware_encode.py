@@ -47,7 +47,7 @@ def set_encoder_bitrate(bitrate_bps: int) -> None:
     Args:
         bitrate_bps: Target bitrate in bits per second (e.g. 2000000 = 2 Mbps)
     """
-    # Find the encoder device. The hardware codec shows up as a V4L2 device
+    # find the encoder device. The hardware codec shows up as a V4L2 device
     # but we need the specific /dev/videoN number that corresponds to the
     # encoder function (not the camera, not the decoder).
     result = subprocess.run(
@@ -68,7 +68,7 @@ def set_encoder_bitrate(bitrate_bps: int) -> None:
         if in_codec_section and "/dev/video" in line:
             encoder_device = line.strip()
             break
-        # An empty line means we have left the codec section
+        # an empty line means we have left the codec section
         if in_codec_section and line.strip() == "":
             break
 
@@ -81,13 +81,13 @@ def set_encoder_bitrate(bitrate_bps: int) -> None:
     subprocess.run(
         ["v4l2-ctl", "-d", encoder_device,
          "--set-ctrl", f"video_bitrate={bitrate_bps}"],
-        check=False  # Don't raise an exception if this fails; the pipeline will still run
+        check=False  # don't raise an exception if this fails; the pipeline will still run
     )
     print(f"Set hardware encoder bitrate: {bitrate_bps // 1000} kbps on {encoder_device}")
 
 
-# -----------------------------------------------------------------
-# Set bitrate before building the pipeline
+# ----------------------------------------------------------------
+# set bitrate before building the pipeline
 # -----------------------------------------------------------------
 set_encoder_bitrate(2_000_000)   # 2 Mbps — same as the software example
 
@@ -121,7 +121,7 @@ pipeline = Gst.parse_launch("""
     ! filesink location=output_hardware.mp4 sync=false
 """)
 
-# -----------------------------------------------------------------
+# --------------------------------------------------------------
 # Graceful shutdown (identical reason as in 02_software_encode.py:
 # mp4mux needs an EOS signal to write the file index correctly)
 # -----------------------------------------------------------------
@@ -132,8 +132,8 @@ def on_sigint(sig, frame):
 signal.signal(signal.SIGINT, on_sigint)
 
 # -----------------------------------------------------------------
-# Start recording
-# -----------------------------------------------------------------
+# start recording
+# -------------------------------------------------------------
 pipeline.set_state(Gst.State.PLAYING)
 print("Recording with HARDWARE encoder (v4l2h264enc).")
 print("Check CPU usage in htop — expect ~15-25% total.")
@@ -141,8 +141,8 @@ print("Output: output_hardware.mp4")
 print("Press Ctrl+C to stop and finalise the file.\n")
 
 # -----------------------------------------------------------------
-# Bus polling loop
-# -----------------------------------------------------------------
+# bus polling loop
+# -------------------------------------------------------------
 bus = pipeline.get_bus()
 
 while True:

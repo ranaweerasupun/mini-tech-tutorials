@@ -19,15 +19,15 @@ from picamera2 import Picamera2
 import time
 import os
 
-# -----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # Configuration — adjust these values to suit your project
-# -----------------------------------------------------------------------
+# ------------------------------------------------------------------------
 INTERVAL_SECONDS = 10      # Time between captures in seconds
 TOTAL_CAPTURES   = 360     # Total number of frames (360 × 10s = 1 hour of real time)
 OUTPUT_DIR       = "timelapse_frames"
-# -----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
-# Create the output directory if it doesn't already exist.
+# create the output directory if it doesn't already exist.
 # exist_ok=True means no error if the folder is already there.
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

@@ -79,13 +79,13 @@ def create_pipeline(
 
     # ----------------------------------------------------------------
     # Create the pipeline container
-    # ----------------------------------------------------------------
+    # -----------------------------------------------------------
     # Gst.Pipeline is a special bin (container) that also manages a
     # shared clock for all elements inside it. Every element you create
     # must be added to this pipeline before it can be linked to others.
     pipeline = Gst.Pipeline.new("hardware-encode-pipeline")
 
-    # ----------------------------------------------------------------
+    # -------------------------------------------------------------
     # Create each element
     # ----------------------------------------------------------------
     # Gst.ElementFactory.make(element_name, instance_name)
@@ -117,7 +117,7 @@ def create_pipeline(
 
     # ----------------------------------------------------------------
     # Configure element properties
-    # ----------------------------------------------------------------
+    # --------------------------------------------------------------
     # set_property(property_name, value) is the Python equivalent of
     # writing key=value in a gst-launch-1.0 pipeline string.
     # Property names use hyphens (not underscores) as GStreamer convention.
@@ -146,7 +146,7 @@ def create_pipeline(
     sink.set_property("location", output_path)
     sink.set_property("sync", False)
 
-    # ----------------------------------------------------------------
+    # --------------------------------------------------------------
     # Add all elements to the pipeline
     # ----------------------------------------------------------------
     # Elements must be added to the pipeline BEFORE linking. Adding
@@ -156,7 +156,7 @@ def create_pipeline(
 
     # ----------------------------------------------------------------
     # Link elements together
-    # ----------------------------------------------------------------
+    # ----------------------------------------------------------
     # Plain link() lets GStreamer negotiate the format automatically.
     # link_filtered() inserts an explicit caps constraint between two elements,
     # preventing GStreamer from picking an unexpected or incompatible format.
@@ -193,7 +193,7 @@ def create_pipeline(
     return pipeline
 
 
-# -----------------------------------------------------------------
+# ----------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------
 set_encoder_bitrate(2_000_000)   # 2 Mbps

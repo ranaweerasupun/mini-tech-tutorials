@@ -27,8 +27,8 @@ import time
 
 Gst.init(None)
 
-# -----------------------------------------------------------------
-# Pipeline: webcam → decode → convert → encode → mux → file
+# ---------------------------------------------------------------
+# pipeline: webcam → decode → convert → encode → mux → file
 # -----------------------------------------------------------------
 #
 # Reading left to right, here is what each step does:
@@ -76,8 +76,8 @@ pipeline = Gst.parse_launch("""
     ! filesink location=output_software.mp4 sync=false
 """)
 
-# -----------------------------------------------------------------
-# Graceful shutdown
+# ----------------------------------------------------------------
+# graceful shutdown
 # -----------------------------------------------------------------
 # WHY THIS MATTERS: mp4mux writes its index (the moov atom, which tells
 # media players where each frame is in the file) at the very end of
@@ -105,7 +105,7 @@ signal.signal(signal.SIGINT, on_sigint)
 
 # -----------------------------------------------------------------
 # Start recording
-# -----------------------------------------------------------------
+# ----------------------------------------------------------------
 pipeline.set_state(Gst.State.PLAYING)
 print("Recording with SOFTWARE encoder (x264).")
 print("Check CPU usage in htop — expect ~60-80% on one core.")

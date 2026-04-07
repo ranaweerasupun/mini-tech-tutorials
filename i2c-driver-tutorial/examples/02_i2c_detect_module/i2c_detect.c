@@ -24,7 +24,7 @@
  *
  * Build:  make
  * Load:   sudo insmod i2c_detect.ko
- * Check:  dmesg | grep i2c_detect
+ * Check. :  dmesg | grep i2c_detect
  * Unload: sudo rmmod i2c_detect
  *
  * SPDX-License-Identifier: GPL-2.0
@@ -34,7 +34,7 @@
 #include <linux/i2c.h>
 #include <linux/of.h>
 
-/* Register 0x00 is the TMP102 temperature register.
+/* register 0x00 is the TMP102 temperature register.
  * We only read it here to confirm the sensor is responding — we do not
  * interpret the value yet. That conversion logic is in the final driver. */
 #define TMP102_TEMP_REG  0x00

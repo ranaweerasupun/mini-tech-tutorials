@@ -5,7 +5,7 @@ The absolute minimum GStreamer script: open a camera and verify
 it produces frames. Nothing is saved to disk. This is purely
 a hardware and configuration sanity check.
 
-Run this first before any of the other scripts. If this does not
+run this first before any of the other scripts. If this does not
 work, something is wrong at the hardware or driver level and the
 other scripts will not work either.
 
@@ -16,7 +16,7 @@ Expected outcome:
   If you have a display connected: a window appears showing the live
   camera feed. Ctrl+C stops it cleanly.
 
-  If you are running headlessly (SSH, no monitor): the script runs
+  if you are running headlessly (SSH, no monitor): the script runs
   silently with no visible output other than the "Recording..." line.
   Frame data is being read and discarded by fakesink. Ctrl+C stops it.
 """
@@ -55,8 +55,8 @@ pipeline = Gst.parse_launch("""
     ! autovideosink
 """)
 
-# -----------------------------------------------------------------
-# State management
+# --------------------------------------------------------------
+# state management
 # -----------------------------------------------------------------
 # set_state returns immediately — it does not wait for the pipeline
 # to actually reach the PLAYING state. The transition happens
@@ -66,7 +66,7 @@ pipeline = Gst.parse_launch("""
 # the bus.
 pipeline.set_state(Gst.State.PLAYING)
 
-# -----------------------------------------------------------------
+# ---------------------------------------------------------------
 # Graceful shutdown on Ctrl+C
 # -----------------------------------------------------------------
 def on_sigint(sig, frame):
@@ -83,9 +83,9 @@ def on_sigint(sig, frame):
 signal.signal(signal.SIGINT, on_sigint)
 
 # -----------------------------------------------------------------
-# Main loop
-# -----------------------------------------------------------------
-# Poll the GStreamer message bus for errors while the pipeline runs.
+# main loop
+# -------------------------------------------------------------
+# poll the GStreamer message bus for errors while the pipeline runs.
 # If GStreamer reports an error (camera disconnected, driver crash, etc.)
 # we print the message and stop cleanly rather than hanging forever.
 bus = pipeline.get_bus()

@@ -28,7 +28,7 @@ time.sleep(2)  # Auto-exposure warm-up
 picam2.capture_file("1_normal.jpg")
 print("Saved 1_normal.jpg  (default settings)")
 
-# --- 2. Increased brightness ---
+# --- 2. Increased brightness -----
 # Brightness is a post-processing offset: -1.0 (black) → 0.0 (normal) → 1.0 (white)
 # It does NOT change the sensor exposure — it's applied by the ISP after capture.
 picam2.set_controls({"Brightness": 0.3})
@@ -44,7 +44,7 @@ time.sleep(1)
 picam2.capture_file("3_contrast.jpg")
 print("Saved 3_contrast.jpg  (Contrast 1.8)")
 
-# --- 4. Vivid saturation ---
+# --- 4. Vivid saturation ----
 # Saturation controls color intensity.
 # 1.0 = natural, 0.0 = grayscale, values above 1.0 = increasingly vivid.
 picam2.set_controls({"Contrast": 1.0, "Saturation": 2.0})

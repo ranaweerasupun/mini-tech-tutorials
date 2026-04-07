@@ -1,8 +1,8 @@
 # 02 — Installation and Setup
 
-This document gets GStreamer installed on your Raspberry Pi 5, confirms that
-the hardware encoder is present and accessible, and points your webcam at a
-working test pipeline so you know the physical hardware is ready before you
+This document is to get GStreamer installed on your Raspberry Pi 5, confirm that
+the hardware encoder is present and accessible, and point your webcam at a
+working test pipeline so we know the physical hardware is ready before we
 write a single line of Python.
 
 ---
@@ -48,7 +48,7 @@ codec hardware.
 
 ---
 
-## Verifying the Installation
+## To Verify the Installation
 
 Once installation completes, confirm the core tools are available:
 
@@ -71,7 +71,7 @@ If this prints a version string, Python can talk to GStreamer. If it raises an
 
 ---
 
-## Verifying the Hardware Encoder
+## To Verify the Hardware Encoder
 
 This step only applies to the Raspberry Pi 5. The hardware H.264 encoder is
 implemented as a V4L2 device, which means it appears in the system as a video
@@ -113,7 +113,7 @@ needs to be (re)installed.
 
 ---
 
-## Finding Your Webcam
+## Finding the Webcam
 
 Plug in your USB webcam if you have not already. Confirm the system sees it:
 
@@ -155,7 +155,7 @@ format entries look like this:
 
 ---
 
-## A Quick Sanity Test
+## Checking things Early
 
 Before writing any Python, run this one-liner from the terminal to confirm that
 GStreamer can open the camera and produce video frames:

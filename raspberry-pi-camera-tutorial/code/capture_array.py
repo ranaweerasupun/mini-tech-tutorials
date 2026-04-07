@@ -39,7 +39,7 @@ print(f"  Data type: {image_array.dtype}")      # uint8 = values 0-255
 print(f"  Min value: {image_array.min()}")      # 0 = black
 print(f"  Max value: {image_array.max()}")      # 255 = max brightness
 
-# --- Basic statistics ---
+# --- Basic statistics ------
 # .mean() across the whole array gives average brightness across all pixels
 # and all three colour channels combined.
 avg_brightness = image_array.mean()

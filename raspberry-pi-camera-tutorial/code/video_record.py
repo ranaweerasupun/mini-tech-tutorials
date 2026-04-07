@@ -81,7 +81,7 @@ if clip_count > 0:
         print(f"  ffmpeg -i clip_{i:03d}.h264 -c copy clip_{i:03d}.mp4")
 
 
-# -----------------------------------------------------------------------
+# -------------------------------------------------------------------------
 # ALTERNATIVE: Record directly to .mp4 using FfmpegOutput
 # -----------------------------------------------------------------------
 # If you prefer .mp4 output without a post-processing step, replace

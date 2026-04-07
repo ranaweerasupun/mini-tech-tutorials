@@ -164,7 +164,7 @@ the pipeline run silently with the wrong format.
 
 ---
 
-## Putting it Together: Reading a Pipeline String
+## Putting everything Together: Reading a Pipeline String
 
 You now have the vocabulary to read a real pipeline string. Here is the
 software-encoded pipeline from later in this tutorial:
@@ -195,6 +195,6 @@ the resulting bytes to `output.mp4` on disk.
 Every step is necessary. Every `!` is a pad link. Every `key=value` pair
 after an element name is a property being set on that element. Once you
 can read a pipeline string like this and understand the role of each component,
-you are ready to start building your own.
+we are ready to start building our own pipeline.
 
 **Next: [02 — Installation and Setup](02-installation-and-setup.md)**

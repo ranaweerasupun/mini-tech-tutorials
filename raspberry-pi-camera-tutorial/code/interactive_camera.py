@@ -14,8 +14,8 @@ Run: python3 interactive_camera.py
 from picamera2 import Picamera2
 import time
 
-# Start the camera once and leave it running for the whole session.
-# Auto-exposure settles once, and every capture after that is instant.
+# start the camera once and leave it running for the whole session.
+# auto-exposure settles once, and every capture after that is instant.
 picam2 = Picamera2()
 picam2.start()
 

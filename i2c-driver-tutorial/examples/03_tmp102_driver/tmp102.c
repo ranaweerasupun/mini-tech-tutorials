@@ -42,7 +42,7 @@
 
 #define TMP102_TEMP_REG  0x00
 
-/* All per-device state lives in this struct. One instance is allocated
+/* all per-device state lives in this struct. One instance is allocated
  * per physical TMP102 sensor. See docs/03-device-model.md. */
 struct tmp102_data {
     struct i2c_client *client;
@@ -50,7 +50,7 @@ struct tmp102_data {
 };
 
 /*
- * Read the temperature register and convert the raw value to millidegrees C.
+ * read the temperature register and convert the raw value to millidegrees C.
  *
  * TMP102 register format (16 bits, big-endian from sensor):
  *   bits [15:4] — 12-bit two's complement temperature, 0.0625°C per count

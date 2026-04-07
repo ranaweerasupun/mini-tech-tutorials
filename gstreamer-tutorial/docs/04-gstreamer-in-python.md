@@ -1,6 +1,6 @@
 # 04 — GStreamer in Python
 
-Everything you did with `gst-launch-1.0` in the previous document can be done
+Everything we did with `gst-launch-1.0` in the previous document can be done
 from Python. The two approaches are not fundamentally different — Python just
 gives you variables, logic, and loops around the same underlying GStreamer
 machinery. This document explains how the Python bindings work and how they

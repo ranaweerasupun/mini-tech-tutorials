@@ -31,15 +31,15 @@ import numpy as np
 import time
 import os
 
-# -----------------------------------------------------------------------
-# Configuration — tune these for your environment
+# --------------------------------------------------------------------
+# configuration — tune these for your environment
 # -----------------------------------------------------------------------
 MOTION_THRESHOLD  = 25       # Per-pixel change to count as 'moved'
 MOTION_MIN_PIXELS = 5000     # Minimum changed pixels to trigger
 CAPTURE_INTERVAL  = 0.1      # Seconds between frame comparisons
 COOLDOWN_SECONDS  = 3        # Seconds to wait after a trigger before re-arming
 OUTPUT_DIR        = "motion_captures"
-# -----------------------------------------------------------------------
+# ---------------------------------------------------------------------
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

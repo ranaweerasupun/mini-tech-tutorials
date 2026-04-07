@@ -1,4 +1,4 @@
-# 03 — Your First Pipeline
+# 03 — Our First Pipeline
 
 Before writing any Python, it is worth spending time with `gst-launch-1.0` —
 GStreamer's command-line pipeline runner. Think of it as a REPL for pipelines.
