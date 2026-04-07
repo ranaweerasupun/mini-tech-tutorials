@@ -151,31 +151,43 @@ Now that you understand the architecture, here are the four patterns you'll enco
 For those who want to understand the object-oriented structure, here is the class hierarchy showing what inherits from what:
 
 ```mermaid
-flowchart TD
-    obj["object\nPython base class"]
+classDiagram
+    class Preview { <<abstract>> }
+    class Encoder { <<abstract>> }
+    class Output  { <<abstract>> }
 
-    obj --> Picamera2
-    obj --> Preview
-    obj --> Encoder
-    obj --> Output
-    obj --> CameraConfiguration
-    obj --> StreamConfiguration
-    obj --> Transform
-    obj --> CompletedRequest
-    obj --> Metadata
+    object <|-- Picamera2
+    object <|-- Preview
+    object <|-- Encoder
+    object <|-- Output
+    object <|-- CameraConfiguration
+    object <|-- StreamConfiguration
+    object <|-- Transform
+    object <|-- CompletedRequest
+    object <|-- Metadata
 
-    Preview["Preview (Abstract Base)"] --> QtPreview
-    Preview --> DrmPreview["DrmPreview\nHeadless / embedded systems"]
-    Preview --> NullPreview["NullPreview\nNo display (testing / CI)"]
-    QtPreview --> QtGlPreview["QtGlPreview\nQt with OpenGL acceleration"]
+    Preview  <|-- QtPreview
+    Preview  <|-- DrmPreview
+    Preview  <|-- NullPreview
+    QtPreview <|-- QtGlPreview
 
-    Encoder["Encoder (Abstract Base)"] --> H264Encoder["H264Encoder\nEfficient video recording"]
-    Encoder --> MJPEGEncoder["MJPEGEncoder\nMotion JPEG recording"]
-    Encoder --> JpegEncoder["JpegEncoder\nStill image encoding"]
+    Encoder  <|-- H264Encoder
+    Encoder  <|-- MJPEGEncoder
+    Encoder  <|-- JpegEncoder
 
-    Output["Output (Abstract Base)"] --> FileOutput["FileOutput\nWrite to disk"]
-    Output --> FfmpegOutput["FfmpegOutput\nPipe through FFmpeg"]
-    Output --> CircularOutput["CircularOutput\nRing-buffer (e.g. dashcam style)"]
+    Output   <|-- FileOutput
+    Output   <|-- FfmpegOutput
+    Output   <|-- CircularOutput
+
+    note for DrmPreview   "Headless / embedded systems"
+    note for NullPreview  "No display (testing / CI)"
+    note for QtGlPreview  "Qt with OpenGL acceleration"
+    note for H264Encoder  "Efficient video recording"
+    note for MJPEGEncoder "Motion JPEG recording"
+    note for JpegEncoder  "Still image encoding"
+    note for FileOutput   "Write to disk"
+    note for FfmpegOutput "Pipe through FFmpeg"
+    note for CircularOutput "Ring-buffer (e.g. dashcam style)"
 ```
 
 Abstract base classes (Preview, Encoder, Output) define a common interface that all subclasses must implement. This is what allows Picamera2 to treat `H264Encoder` and `MJPEGEncoder` interchangeably — they both implement the same encoder interface, just with different compression algorithms underneath.
