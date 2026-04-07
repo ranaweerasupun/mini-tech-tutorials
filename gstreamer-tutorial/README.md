@@ -1,7 +1,7 @@
-# 🎬 GStreamer on Raspberry Pi 5 — A Beginner's Guide
+# GStreamer on Raspberry Pi 5 — A Beginner's Guide
 
 A beginner-friendly, open-source tutorial for Python developers who want to
-build video pipelines with GStreamer on the Raspberry Pi 5. You will go from
+build video pipelines with GStreamer on the Raspberry Pi 5. We will go from
 "never heard of GStreamer" to capturing webcam video and encoding it to an
 H.264 file using the Pi 5's hardware video encoder — dropping CPU usage from
 ~80% to ~15% in the process.
@@ -11,15 +11,15 @@ you have everything you need to start.
 
 ---
 
-## What You Will Build
+## What We Will Build
 
-By the end of this tutorial you will have a Python script that:
+By the end of this tutorial we will have a Python script that:
 
 - Captures live video from a USB webcam at 720p30
 - Encodes it to H.264 using the Pi 5's built-in hardware encoder (not the CPU)
 - Saves the result as a playable video file
 
-Along the way you will understand *why* every line exists — not just what to
+Along the way we will discuss *why* every line exists — not just what to
 copy and paste. 
 
 
@@ -27,7 +27,7 @@ copy and paste.
 
 ## Tutorial Structure
 
-Work through the documents in order. Each one builds directly on the last.
+Work through these documents in order. Each one builds directly on the last.
 
 | # | Document | What it covers |
 |---|----------|---------------|

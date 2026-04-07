@@ -1,4 +1,4 @@
-# 🔧 systemd Services Tutorial
+# systemd Services Tutorial
 
 A beginner-friendly, open-source guide to running your applications as **systemd services** on Linux — with a focus on Raspberry Pi and other embedded systems. Learn how to turn any Python or Node.js script into a reliable, self-starting, self-recovering system service.
 

@@ -5,7 +5,7 @@ of how GStreamer thinks about video. GStreamer has its own vocabulary —
 pipelines, elements, pads, caps — and if you do not understand what those words
 mean, the error messages you will encounter later will seem completely
 impenetrable. This document is entirely conceptual. There is nothing to install
-or run yet. Read it slowly and make sure each concept clicks before moving on.
+or run yet. Read it slowly and make sure each concept mkae sense before moving on.
 
 ---
 
@@ -32,8 +32,14 @@ finished product emerges at the other end. In GStreamer:
 A simple pipeline that reads a video from a file and plays it on screen might
 look like this:
 
+```mermaid
+flowchart LR
+    A[filesrc] --> B[decodebin] --> C[videoconvert] --> D[autovideosink]
 ```
-filesrc → decodebin → videoconvert → autovideosink
+
+```mermaid
+flowchart LR
+    A["Reads raw bytes<br/>from a file on disk"] --> B["Detects format &<br/>decodes to raw frames"] --> C["Adjusts pixel format<br/>for the display"] --> D["Renders frames<br/>to a window on screen"]
 ```
 
 Read left to right: `filesrc` reads raw bytes from a file on disk.
@@ -163,15 +169,14 @@ the pipeline run silently with the wrong format.
 You now have the vocabulary to read a real pipeline string. Here is the
 software-encoded pipeline from later in this tutorial:
 
+```mermaid
+flowchart LR
+    A[v4l2src] --> B[image/jpeg] --> C[jpegdec] --> D[videoconvert] --> E[x264enc] --> F[h264parse] --> G[mp4mux] --> H[filesink]
 ```
-v4l2src device=/dev/video0
-! image/jpeg,width=1280,height=720,framerate=30/1
-! jpegdec
-! videoconvert
-! x264enc tune=zerolatency speed-preset=ultrafast bitrate=2000
-! h264parse config-interval=1
-! mp4mux
-! filesink location=output.mp4
+
+```mermaid
+flowchart LR
+    A["Opens webcam<br/>at /dev/video0"] --> B["Caps filter<br/>1280×720 @ 30fps"] --> C["Decompresses MJPEG<br/>to raw video"] --> D["Converts pixel format<br/>for encoder"] --> E["Compresses to H.264<br/>2000 kbps, ultrafast"] --> F["Reorganises H.264<br/>for compatibility"] --> G["Wraps stream in<br/>MP4 container"] --> H["Writes bytes<br/>to output.mp4"]
 ```
 
 Reading it left to right: `v4l2src` opens the webcam at `/dev/video0` and

@@ -1,4 +1,4 @@
-# 📷 Raspberry Pi Camera Tutorial
+# Raspberry Pi Camera Tutorial
 
 A comprehensive, open-source guide to working with the Raspberry Pi Camera using Python and the **Picamera2** library. This tutorial is designed for all skill levels — whether you're wiring up your first camera module or building a computer vision pipeline, there's something here for you.
 
