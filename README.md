@@ -1,100 +1,98 @@
-# Raspberry Pi Tutorials
+# Short Tutorials
 
-A collection of hands-on tutorials for people who want to go a level deeper with their Raspberry Pi — past running scripts someone else wrote, into actually understanding the system underneath.
+A growing collection of short, focused tutorials on topics across electronics, embedded systems, Linux, IoT, edge computing, web development, robotics, and nanotechnology.
 
-These started as notes I kept while figuring things out myself. The official documentation is often accurate but rarely explains *why* things work the way they do, which makes it hard to adapt when something goes wrong or when you want to do something slightly different. These tutorials try to fill that gap.
-
-Each one is built around a real, working goal — not a toy example, but something you'd actually want to build. The explanations cover the concepts you need before you need them, so by the time you're writing code or config, the pieces should already make sense.
+The goal is simple: pick one specific thing, explain it well, and stop. No fluff, no filler, no five-page intro before you write a single line of code. Each tutorial is self-contained and can be finished in a sitting.
 
 ---
 
-## Tutorials
+## What's Here Now
 
-### [GStreamer on Raspberry Pi 5](gstreamer-tutorial/)
-**Build a hardware-accelerated video pipeline in Python**
+### Raspberry Pi & Linux
 
-GStreamer has a steep initial learning curve — the mental model is unfamiliar and the error messages aren't particularly helpful until you know what to look for. This tutorial builds that mental model first, then puts it to use capturing 720p video from a USB webcam and encoding it to H.264 using the Pi 5's hardware encoder. The difference between software encoding (~80% CPU) and hardware encoding (~15% CPU) is dramatic and immediately tangible.
+| Tutorial | What it covers |
+|----------|----------------|
+| [GStreamer on Raspberry Pi 5](gstreamer-tutorial/) | Building hardware-accelerated video pipelines in Python — from zero GStreamer knowledge to H.264 encoding using the Pi 5's hardware encoder |
+| [Writing a Linux Kernel Driver](i2c-driver-tutorial/) | A real I2C driver for the TMP102 temperature sensor, from blank `.c` file to live readings through the hwmon subsystem |
+| [Raspberry Pi Camera with Python](raspberry-pi-camera-tutorial/) | Picamera2 from first photo through motion detection, time-lapses, and numpy frame processing |
+| [Running Apps as systemd Services](systemd-services-tutorial/) | Service files, restart policies, logging, environment variables, and timers — the gap between "works when I run it" and "runs forever on its own" |
 
-No prior GStreamer experience needed. Basic Python is enough to start.
-
-→ [Go to tutorial](gstreamer-tutorial/README.md)
-
----
-
-### [Writing a Linux Kernel Driver](i2c-driver-tutorial/)
-**A real I2C driver for the TMP102 temperature sensor**
-
-Kernel development has a reputation for being inaccessible, and most tutorials either go too shallow ("here's a hello world module, good luck") or assume you already understand the device model, the bus subsystem, and memory management patterns. This one doesn't. It takes you from a blank `.c` file to a driver that reads live temperature data from real hardware and surfaces it through the standard Linux hwmon interface — the same one `sensors` and `lm-sensors` use.
-
-You'll need C basics — structs, pointers, header files — but no kernel experience.
-
-→ [Go to tutorial](i2c-driver-tutorial/README.md)
-
----
-
-### [Raspberry Pi Camera with Python](raspberry-pi-camera-tutorial/)
-**From first photo to motion detection, time-lapses, and numpy arrays**
-
-Picamera2 is the current library for the Pi camera and it's genuinely good, but the documentation is dense and the architecture takes some getting used to. This tutorial covers the basics, the architecture, and then a set of practical projects: time-lapses, button-triggered captures, frame-differencing motion detection, and H.264 video recording. The motion detection section in particular gets into some interesting territory with numpy arrays and frame comparison.
-
-Works with any Pi Camera module (v1, v2, v3, HQ) on Pi 3, 4, 5, or Zero 2 W.
-
-→ [Go to tutorial](raspberry-pi-camera-tutorial/README.md)
-
----
-
-### [Running Applications as systemd Services](systemd-services-tutorial/)
-**Stop babysitting your Pi — let systemd do it**
-
-There's a gap between "script that works when I run it" and "thing that starts on boot, restarts when it crashes, and logs properly." systemd fills that gap, and once you've written a few service files it becomes second nature. This tutorial covers service files from scratch, restart policies, dependency ordering, environment files for secrets and config, logging with journalctl, and systemd timers as a cleaner alternative to cron.
-
-Works on any modern Linux system, not just Raspberry Pi.
-
-→ [Go to tutorial](systemd-services-tutorial/README.md)
-
----
-
-## Who These Are For
-
-These tutorials are written for people who are comfortable with the basics and want to go further — hobbyists who've outgrown copy-pasting scripts, engineering students wanting hands-on Linux and embedded experience, and developers from other backgrounds who are new to this kind of systems-level work.
-
-They're not written for complete beginners and they're not written for kernel engineers who've been doing this for twenty years. The target is somewhere in the middle: technically comfortable, but new to this specific territory.
+More topics are on the way. The table above will grow.
 
 ---
 
 ## What's Coming
 
-More tutorials are planned. Topics in the queue include:
+These are still being written — listed here so you know what's in the queue:
 
-- **MQTT on the Pi** — connecting sensors to a broker, handling unreliable networks, persistent message queuing
-- **Device Tree Overlays** — writing and compiling your own overlays from scratch
-- **V4L2 and camera pipelines** — going below Picamera2 to understand the capture stack
-- **GPIO and interrupts in C** — kernel-side GPIO handling, not just the Python libraries
+**Electronics & Embedded**
+- Reading datasheets without losing your mind
+- I2C and SPI from first principles — what's actually happening on the wire
+- Choosing a microcontroller for a project (and why the answer isn't always Arduino)
+- PCB design basics — from schematic to manufactured board
 
-No fixed schedule. They come out when they're ready and properly explained.
+**Linux & Systems**
+- Device tree overlays — writing and compiling your own
+- V4L2 and the Linux camera stack below Picamera2
+- GPIO and interrupts in C — kernel-side, not Python
+- Cross-compiling for ARM on a desktop machine
+
+**IoT & Edge Computing**
+- MQTT from scratch — brokers, clients, QoS levels, and what happens when the network drops
+- Persistent offline queuing for unreliable edge networks
+- Running inference on-device — picking the right model size for constrained hardware
+
+**Web Development**
+- WebSockets for real-time sensor dashboards
+- Building a minimal REST API for hardware control
+- Serving data from an embedded device over a local network
+
+**Robotics**
+- ROS2 basics — nodes, topics, and why it works the way it does
+- Motor control fundamentals — PWM, H-bridges, and feedback
+- Sensor fusion: combining IMU, GPS, and encoders
+
+**Nanotechnology**
+- Nanomaterials in electronics — what engineers actually need to know
+- MEMS sensors — how accelerometers and gyroscopes work at the device level
+
+No fixed schedule. Topics get added when they're ready and properly explained, not before.
+
+---
+
+## How These Are Written
+
+Every tutorial picks one concrete goal — something real, not a contrived example — and builds toward it. The concepts you need are introduced before you need them. By the time you're writing code or wiring something up, the reasoning behind it should already be clear.
+
+They're short by design. The aim is that you can finish one in a couple of hours, come away with something working, and actually understand what you built.
+
+---
+
+## Who This Is For
+
+If you're comfortable with the basics and want to go a level deeper — whether that's your first kernel module, your first video pipeline, or your first PCB — these are written with you in mind.
+
+Some tutorials assume programming experience, some assume electronics background, some assume neither. Each one says upfront what you need to know to follow along.
 
 ---
 
 ## Structure
 
-Every tutorial follows the same pattern:
+Every tutorial follows the same layout:
 
 ```
 tutorial-name/
-├── README.md          # Overview, prerequisites, quick start
-├── docs/              # The actual tutorial, split into numbered documents
-│   ├── 01-...md
-│   ├── 02-...md
-│   └── ...
-└── examples/          # Standalone, runnable code for each stage
+├── README.md       # Overview, what you need, quick start
+├── docs/           # The tutorial itself, split into short numbered sections
+└── examples/       # Complete, runnable code for each stage
 ```
 
-The docs are meant to be read in order. The examples can be run independently — each one is a complete, working program, not a fragment.
+The docs read in order. The examples run independently.
 
 ---
 
 ## License
 
-All tutorials and code examples are released under the [MIT License](LICENSE), except for kernel module source files which carry the GPL-2.0 license as required for Linux kernel code.
+Everything here is released under the [MIT License](LICENSE), except kernel module source files which are GPL-2.0 as required by the Linux kernel.
 
-Use these however you like. If something here helped you, pass it on.
+Use these however you like.
