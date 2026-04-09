@@ -1,0 +1,8 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# OS junk
+.DS_Store
+Thumbs.db
