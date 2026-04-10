@@ -8,7 +8,7 @@ Once you control the camera from Python instead of the terminal, you move from r
 
 ## Why Python Instead of the Command Line?
 
-When you run `libcamera-still` from the terminal, the entire camera system starts up, captures one image, and shuts back down. Every single time. There's a real cost to this: startup involves loading camera firmware, allocating memory buffers, and running the automatic exposure and white balance algorithms long enough for them to stabilize. That takes at least a second or two, every time.
+When you run `rpicam-still` from the terminal, the entire camera system starts up, captures one image, and shuts back down. Every single time. There's a real cost to this: startup involves loading camera firmware, allocating memory buffers, and running the automatic exposure and white balance algorithms long enough for them to stabilize. That takes at least a second or two, every time.
 
 With Python and Picamera2, you start the camera **once** and keep it running for as long as you need. The auto-exposure settles once at startup, and after that, every capture is nearly instantaneous. You can also process images directly in memory — analyzing pixel data, making decisions, never touching the disk — which is the foundation of any computer vision application.
 

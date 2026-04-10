@@ -79,7 +79,7 @@ sudo reboot
 Once the Pi has rebooted with the camera connected, run:
 
 ```bash
-libcamera-hello --list-cameras
+rpicam-hello --list-cameras
 ```
 
 If everything's working, you'll see output like this:
@@ -106,13 +106,13 @@ Before touching Python, confirm the camera works end-to-end using the built-in c
 Take a quick still photo and display it for five seconds:
 
 ```bash
-libcamera-hello -t 5000
+rpicam-hello -t 5000
 ```
 
 This should open a preview window showing what the camera sees. If you're running headless (no monitor), skip straight to:
 
 ```bash
-libcamera-still -o test.jpg
+rpicam-still -o test.jpg
 ```
 
 Then check the file exists and has a non-zero size:

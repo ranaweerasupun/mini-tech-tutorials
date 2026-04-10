@@ -13,8 +13,8 @@ Start at the bottom (hardware and OS) and work upward (Python). If the hardware 
 Run these two commands before anything else. They give you the most useful diagnostic information and confirm whether the camera is visible to the OS at all.
 
 ```bash
-# Ask libcamera to list all detected cameras
-libcamera-hello --list-cameras
+# Ask rpicam to list all detected cameras
+rpicam-hello --list-cameras
 ```
 
 ```bash
@@ -22,7 +22,7 @@ libcamera-hello --list-cameras
 dmesg | grep -i camera
 ```
 
-If `libcamera-hello --list-cameras` returns `No cameras available`, your problem is below the Python layer — start with the hardware checks. If it shows your camera model (e.g., `imx708`), the hardware is fine and your problem is in the Python/library layer.
+If `rpicam-hello --list-cameras` returns `No cameras available`, your problem is below the Python layer — start with the hardware checks. If it shows your camera model (e.g., `imx708`), the hardware is fine and your problem is in the Python/library layer.
 
 ---
 
@@ -42,11 +42,17 @@ sudo raspi-config
 sudo reboot
 ```
 
-On Raspberry Pi OS Bookworm with the libcamera stack, the camera is normally enabled by default, but it's worth confirming.
+On Raspberry Pi OS Bookworm, the camera is normally enabled by default, but it's worth confirming.
 
 **Check that `/dev/video0` (or similar) exists.** After rebooting, run `ls /dev/video*`. On a working system with a camera connected, you should see at least one device listed. No output suggests the camera driver didn't load.
 
 **Confirm GPU memory is sufficient.** This matters more on older Pi models. Run `sudo raspi-config`, go to Advanced Options → Memory Split, and make sure the value is at least 128.
+
+---
+
+## Problem: libcamera-hello: "command not found" (or any libcamera-* command)
+
+The camera tools were renamed from `libcamera-*` to `rpicam-*` in recent versions of Raspberry Pi OS. If you followed an older tutorial that references `libcamera-hello`, `libcamera-still`, or `libcamera-vid`, simply substitute `rpicam-` in place of `libcamera-` and the commands will work. The old package name `libcamera-apps` still installs correctly — it now acts as a pointer to `rpicam-apps` — so the installation step in older guides isn't broken, just the command names at the end of it.
 
 ---
 
@@ -228,7 +234,7 @@ bgr = cv2.cvtColor(image[:, :, :3], cv2.COLOR_RGB2BGR)
 
 ```bash
 # Full camera system information
-libcamera-hello --list-cameras
+rpicam-hello --list-cameras
 
 # Check the kernel log for hardware errors
 dmesg | grep -iE "camera|imx|ov5647|imx477|imx708"
@@ -263,4 +269,4 @@ The [Raspberry Pi Forums — Camera section](https://forums.raspberrypi.com/view
 
 The [Picamera2 GitHub Issues page](https://github.com/raspberrypi/picamera2/issues) is the right place to report bugs or search for known issues that match your symptoms.
 
-When asking for help, include the output of `libcamera-hello --list-cameras`, your OS version (`cat /etc/os-release`), your Python version (`python3 --version`), and the full error traceback from your script.
+When asking for help, include the output of `rpicam-hello --list-cameras`, your OS version (`cat /etc/os-release`), your Python version (`python3 --version`), and the full error traceback from your script.
