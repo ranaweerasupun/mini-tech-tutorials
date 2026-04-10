@@ -1,13 +1,14 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 # env-example.service
 # --------------------
 # systemd service file demonstrating the EnvironmentFile pattern
 # for managing secrets and configuration securely.
 #
 # The application reads sensitive values (API keys, passwords) from
-# /etc/env-service/config.env, which is owned by root and has 600
+# /etc/env-service/config.env, which is owned by root with 600
 # permissions so only root can read it. systemd reads the file as
 # root and injects the values into the service environment before
-# spawning the process — so the 'pi' user never needs file access.
+# spawning the process — so the 'pi' user never needs direct file access.
 #
 # Deploy steps:
 #   1. Set up the secrets file (see examples/env-service/config.env.example)

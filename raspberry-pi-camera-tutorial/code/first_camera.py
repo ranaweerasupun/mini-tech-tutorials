@@ -1,3 +1,4 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 first_camera.py
 ---------------
@@ -14,20 +15,20 @@ import time
 # just setting up the Python-side connection to the camera system.
 picam2 = Picamera2()
 
-# start the camera. The sensor powers up and begins streaming frames
+# Start the camera. The sensor powers up and begins streaming frames
 # continuously in the background.
 picam2.start()
 
-# wait for the automatic exposure and white balance algorithms to
+# Wait for the automatic exposure and white balance algorithms to
 # analyse the scene and converge on stable settings. Without this
 # pause, the first captured frame is often poorly exposed.
 time.sleep(2)
 
-# grab the current frame and save it. The camera has been running
+# Grab the current frame and save it. The camera has been running
 # this whole time, so the capture is nearly instantaneous.
 picam2.capture_file("test.jpg")
 
-# shut the camera down and release the hardware resources.
+# Shut the camera down and release the hardware resources.
 picam2.stop()
 
 print("Done! Open test.jpg to see the result.")

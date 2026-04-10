@@ -1,7 +1,8 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 app_with_config.py
 ------------------
-A Python service that reads all of its configuration from environment
+A Python service that reads all its configuration from environment
 variables — both sensitive secrets (via EnvironmentFile) and
 non-sensitive settings (via inline Environment directives).
 

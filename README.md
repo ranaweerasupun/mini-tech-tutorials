@@ -4,7 +4,7 @@ A growing collection of short, focused tutorials across electronics, embedded sy
 
 ---
 
-## Why This Exists
+## Why I Created This...
 
 You know that specific kind of frustration where you're trying to do something that *should* be straightforward, but the official docs assume you already know half the things they're supposed to be teaching you? And the Stack Overflow answers are five years old and reference an API that no longer exists? And you ask an AI and it confidently generates something that looks plausible, compiles (maybe), and then just doesn't work — and when you ask why, it apologises and generates a slightly different version that also doesn't work?
 
@@ -16,7 +16,7 @@ Each one is short and covers one thing. You should be able to finish it in a sit
 
 ---
 
-## What's Here Now
+## The Tutorials List
 
 ### Raspberry Pi & Linux
 
@@ -95,6 +95,12 @@ Docs are meant to be read in order. Examples can be run independently — each o
 
 ## License
 
-Everything here is MIT licensed, except kernel module source files which carry GPL-2.0 as required for Linux kernel code.
+**Code** (all `.c`, `.py`, `.js`, `.dts`, `.service`, `.timer`, `Makefile` files) — MIT License
 
-Use these however you like. If something here saved you a few hours, hopefully it pays forward somewhere.
+**Tutorial content** (all `.md` files, READMEs, and written documentation) — CC BY-NC 4.0
+
+The code is free to use in your own projects without restriction — copy it, modify it, ship it. The written tutorials may be shared and adapted for non-commercial purposes with attribution, but may not be repackaged or sold.
+
+See the `LICENSE` file inside each tutorial folder for the full license text.
+
+© 2025 [Supun Akalanka Sriyananda]

@@ -11,7 +11,7 @@
  *   - Performing a real I2C read to verify hardware presence
  *
  * It does NOT register with hwmon or expose any sysfs attributes —
- * that is the job of the final driver. The goal here is to make the
+ * that's the job of the final driver. The goal here is to make the
  * probe/remove lifecycle feel familiar before adding the output layer.
  *
  * Study this alongside docs/03-device-model.md and docs/05-i2c.md.
@@ -24,7 +24,7 @@
  *
  * Build:  make
  * Load:   sudo insmod i2c_detect.ko
- * Check. :  dmesg | grep i2c_detect
+ * Check:  dmesg | grep i2c_detect
  * Unload: sudo rmmod i2c_detect
  *
  * SPDX-License-Identifier: GPL-2.0
@@ -34,8 +34,8 @@
 #include <linux/i2c.h>
 #include <linux/of.h>
 
-/* register 0x00 is the TMP102 temperature register.
- * We only read it here to confirm the sensor is responding — we do not
+/* Register 0x00 is the TMP102 temperature register.
+ * We only read it here to confirm the sensor is responding — we don't
  * interpret the value yet. That conversion logic is in the final driver. */
 #define TMP102_TEMP_REG  0x00
 
@@ -43,10 +43,9 @@
  * Per-device private data.
  *
  * This struct holds all state for one instance of the device. Even though
- * this example only needs the client pointer, it is good practice to have
- * the struct from the beginning — adding fields later is easy, and the
- * pattern of "allocate struct in probe, retrieve in other functions" is
- * something to internalise early.
+ * this example only needs the client pointer, it's good practice to have
+ * the struct from the beginning — the pattern of "allocate struct in probe,
+ * retrieve in other functions" is something to internalise early.
  */
 struct i2c_detect_data {
     struct i2c_client *client;
@@ -91,7 +90,7 @@ static int i2c_detect_probe(struct i2c_client *client,
     /*
      * Perform a test read of register 0x00.
      * A negative return means the I2C transaction failed — the sensor
-     * did not respond, which almost always means a wiring problem.
+     * didn't respond, which almost always means a wiring problem.
      * Failing here in probe prevents registering a non-functional device.
      */
     raw = i2c_smbus_read_word_swapped(client, TMP102_TEMP_REG);
@@ -104,7 +103,7 @@ static int i2c_detect_probe(struct i2c_client *client,
      * We got data back. At this stage we just confirm the sensor is alive.
      * The raw value is logged in hex so you can cross-check it with:
      *   sudo i2cget -y 1 0x48 0x00 w
-     * (The values may differ slightly between reads as temperature changes.)
+     * (Values may differ slightly between reads as temperature changes.)
      */
     dev_info(dev, "TMP102 responded! Raw register 0x00 = 0x%04x\n",
              (unsigned int)(raw & 0xFFFF));
@@ -117,7 +116,7 @@ static int i2c_detect_probe(struct i2c_client *client,
  * remove — called when the device is removed or the module is unloaded.
  *
  * All memory allocated with devm_ is freed automatically when this
- * function returns, so there is nothing to clean up manually here.
+ * function returns, so there's nothing to clean up manually here.
  */
 static int i2c_detect_remove(struct i2c_client *client)
 {

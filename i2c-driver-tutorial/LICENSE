@@ -1,6 +1,6 @@
-MIT License
-
-Copyright (c) 2025
+MIT License (Code)
+==================
+Copyright (c) 2025 [Supun Akalanka Sriyananda]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,9 +20,43 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
----
 
-Note on kernel module source files:
-The C source files in the examples/ directory (hello.c, i2c_detect.c, tmp102.c)
-are additionally licensed under GPL-2.0-only, as required for Linux kernel modules.
-The GPL-2.0 license text is available at https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+Creative Commons Attribution-NonCommercial 4.0 (Tutorial Content)
+==================================================================
+Copyright (c) 2025 [Supun Akalanka Sriyananda]
+
+The tutorial documentation (all .md files, READMEs, and written content)
+is licensed under the Creative Commons Attribution-NonCommercial 4.0
+International License.
+
+You are free to:
+  - Share: copy and redistribute the material in any medium or format
+  - Adapt: remix, transform, and build upon the material
+
+Under the following terms:
+  - Attribution: You must give appropriate credit and link to the original.
+  - NonCommercial: You may not use the material for commercial purposes.
+
+Full license text: https://creativecommons.org/licenses/by-nc/4.0/
+
+
+
+GNU General Public License v2.0 (Kernel Module Source Files)
+=============================================================
+Copyright (c) 2025 Supun Akalanka Sriyananda
+
+The kernel module source files (all .c files and Makefiles in the
+examples/ directory) are licensed under the GNU General Public
+License version 2.0, as required for code that interfaces with the
+Linux kernel.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; version 2 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+Full license text: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html

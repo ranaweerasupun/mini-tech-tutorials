@@ -1,8 +1,10 @@
+<!-- © 2025 [Supun Akalanka Sriyananda] — CC BY-NC 4.0. Free to share with attribution, not for commercial use. -->
+
 # 08 — Troubleshooting
 
-Kernel driver development involves more places for things to go wrong than most programming because failures can occur at the hardware layer, the kernel configuration layer, the device tree layer, the module build layer, or the driver code itself. This guide helps you isolate which layer the problem is in and what to do about it — because once you know where the problem lives, the fix is almost always straightforward.
+Kernel driver development has more places for things to go wrong than most programming, because failures can happen at the hardware layer, the kernel configuration layer, the device tree layer, the module build layer, or the driver code itself. The trick is isolating which layer the problem is in — because once you know where it lives, the fix is almost always straightforward.
 
-The general principle is to start at the bottom and work upward. There is no point debugging your driver code if the hardware is not connected correctly, and there is no point debugging the device tree if the kernel cannot even see the I2C bus.
+The general principle: start at the bottom and work upward. There's no point debugging your driver code if the hardware isn't connected correctly, and no point debugging the device tree if the kernel can't even see the I2C bus.
 
 ---
 
@@ -20,13 +22,13 @@ A `48` in the grid means the TMP102 is physically present and responding to I2C 
 
 A `UU` at position 48 means the kernel already has a driver bound to that device — possibly the built-in TMP102 driver that ships with the mainline kernel. Unload it first: `sudo rmmod tmp102` (the mainline driver), then try again. If `UU` persists, a different driver has claimed the device.
 
-Dashes `--` everywhere, including at position 48, mean the sensor is not responding. In this case, work through this physical checklist before touching any software: confirm VCC is connected to 3.3V (not 5V), confirm GND is connected to a ground pin, confirm SDA goes to Pin 3 (GPIO2) and SCL goes to Pin 5 (GPIO3), confirm ADD0 is connected to GND (not floating), and confirm the ribbon cable or jumper wires are making solid contact. It is also worth trying `i2cdetect -y 0` — on some early Pi models the external I2C bus is bus 0, not bus 1.
+Dashes `--` everywhere, including at position 48, mean the sensor isn't responding. Work through this physical checklist before touching any software: confirm VCC is connected to 3.3V (not 5V), confirm GND is connected to a ground pin, confirm SDA goes to Pin 3 (GPIO2) and SCL goes to Pin 5 (GPIO3), confirm ADD0 is connected to GND (not floating), and confirm the jumper wires are making solid contact. It's also worth trying `i2cdetect -y 0` — on some early Pi models the external I2C bus is bus 0, not bus 1.
 
 ---
 
 ## Layer 2: I2C Bus Enabled in the OS
 
-If `i2cdetect -y 1` gives you an error like "Error: Could not open file /dev/i2c-1", the I2C interface is not enabled in the OS:
+If `i2cdetect -y 1` gives you "Error: Could not open file /dev/i2c-1", the I2C interface isn't enabled:
 
 ```bash
 sudo raspi-config
@@ -34,19 +36,19 @@ sudo raspi-config
 # Exit and reboot
 ```
 
-After rebooting, also confirm the kernel module for the I2C bus is loaded:
+After rebooting, confirm the kernel module for the I2C bus is loaded:
 
 ```bash
 lsmod | grep i2c_bcm2835
 ```
 
-If it does not appear, load it manually: `sudo modprobe i2c-bcm2835`. If the module does not exist, the kernel image may not include I2C support — this should not happen on a standard Raspberry Pi OS image.
+If it doesn't appear, load it manually: `sudo modprobe i2c-bcm2835`. If the module doesn't exist, the kernel image may not include I2C support — this shouldn't happen on a standard Raspberry Pi OS image, but it's worth checking.
 
 ---
 
 ## Layer 3: Device Tree Overlay
 
-After the hardware and OS layers are verified, check whether the device tree overlay was applied correctly.
+After hardware and OS layers are verified, check whether the device tree overlay was applied correctly.
 
 First, confirm the compiled overlay file is in the right place:
 
@@ -54,7 +56,7 @@ First, confirm the compiled overlay file is in the right place:
 ls /boot/overlays/tmp102-overlay.dtbo
 ```
 
-If the file is missing, the dtc compilation or the copy step was skipped. Re-run:
+If the file is missing, the dtc compilation or copy step was skipped. Re-run:
 
 ```bash
 dtc -@ -I dts -O dtb -o tmp102-overlay.dtbo tmp102-overlay.dts
@@ -80,7 +82,7 @@ Third, after rebooting, confirm the kernel processed the overlay and registered 
 ls /sys/bus/i2c/devices/
 ```
 
-You should see a `1-0048` entry. Its presence means the device tree node was found and the kernel has created a device record for the sensor. If `1-0048` is absent, the overlay was not applied — double-check the filename in `/boot/firmware/config.txt` matches the `.dtbo` file exactly (without the `.dtbo` extension).
+You should see a `1-0048` entry. Its presence means the device tree node was found and the kernel has created a device record for the sensor. If `1-0048` is absent, the overlay wasn't applied — double-check that the filename in `/boot/firmware/config.txt` matches the `.dtbo` file exactly (without the `.dtbo` extension).
 
 If `1-0048` is present, verify the compatible string was read correctly:
 
@@ -94,7 +96,7 @@ This must print `ti,tmp102`. If it prints something different, the DTS file has 
 
 ## Layer 4: Module Build
 
-If the hardware and device tree layers are working, check that the module built successfully.
+If hardware and device tree are working, check that the module built successfully.
 
 The most common build failure is a kernel header version mismatch:
 
@@ -106,7 +108,7 @@ modinfo tmp102.ko | grep vermagic
 uname -r
 ```
 
-These must match exactly. If they differ, the kernel headers installed do not correspond to the running kernel. This can happen after a kernel update where the headers were not updated simultaneously. Fix it:
+These must match exactly. If they differ, the kernel headers installed don't correspond to the running kernel. This can happen after a kernel update where the headers weren't updated at the same time. Fix it:
 
 ```bash
 sudo apt update && sudo apt install raspberrypi-kernel-headers
@@ -114,7 +116,7 @@ sudo apt update && sudo apt install raspberrypi-kernel-headers
 make clean && make
 ```
 
-A second common build issue is a missing or incorrect Makefile. If `make` gives "No rule to make target" or "missing separator", the Makefile has a problem. The indented lines must use tab characters — spaces will produce the "missing separator" error. Open the Makefile in a hex editor or run `cat -A Makefile` and verify the indented lines begin with `^I` (the tab indicator) rather than spaces.
+A second common build issue is a missing or incorrect Makefile. If `make` gives "No rule to make target" or "missing separator", the Makefile has a problem. The indented lines must use tab characters — spaces produce the "missing separator" error. Run `cat -A Makefile` and verify the indented lines begin with `^I` (the tab indicator) rather than spaces.
 
 ---
 
@@ -131,9 +133,9 @@ dmesg | tail -10
 
 **If you see "Could not read from TMP102 — check your wiring"**, the `probe` function was called (the device tree match worked) but the I2C read failed. The sensor is registered in the device tree but not physically responding. Go back to layer 1 and re-verify the hardware.
 
-**If you see nothing at all from `tmp102`**, the `probe` function was never called. This means the device tree match failed — the compatible string in the overlay does not match the `of_device_id` table in the driver. Compare them character by character: the DTS must say `compatible = "ti,tmp102"` and the driver must have `.compatible = "ti,tmp102"` in its `of_match_table`. Even a single character difference (an underscore instead of a hyphen, wrong capitalisation) prevents the match.
+**If you see nothing at all from `tmp102`**, the `probe` function was never called. This means the device tree match failed — the compatible string in the overlay doesn't match the `of_device_id` table in the driver. Compare them character by character: the DTS must say `compatible = "ti,tmp102"` and the driver must have `.compatible = "ti,tmp102"` in its `of_match_table`. Even a single character difference prevents the match.
 
-**If `insmod` gives "Operation not permitted" or "Invalid module format"**, either you need `sudo` in front of `insmod`, or the module's vermagic does not match the running kernel (addressed in layer 4 above).
+**If `insmod` gives "Operation not permitted" or "Invalid module format"**, either you need `sudo` in front of `insmod`, or the module's vermagic doesn't match the running kernel (addressed in layer 4 above).
 
 ---
 
@@ -151,7 +153,7 @@ This shows the name of every hwmon device registered on the system. Find the one
 cat /sys/class/hwmon/hwmon2/temp1_input
 ```
 
-If this produces a reasonable number (room temperature is typically 18000 to 28000 — i.e. 18–28°C in millidegrees), the driver is working correctly.
+If this produces a reasonable number (room temperature is typically 18000 to 28000 — 18–28°C in millidegrees), the driver is working correctly.
 
 If the value seems wrong — consistently too high or too low — check the arithmetic in `tmp102_read_temperature`. You can verify against a raw register read:
 
@@ -160,13 +162,13 @@ If the value seems wrong — consistently too high or too low — check the arit
 sudo i2cget -y 1 0x48 0x00 w
 ```
 
-Take the raw value (e.g., `0xd817`), swap the bytes (to `0x17d8`), shift right by 4 (to `0x17d` = 381 decimal), multiply by 1000 and divide by 16 (381 × 1000 / 16 = 23812), and you should get approximately what `temp1_input` reports. If the driver's value and the manual calculation agree, the driver is correct and the temperature reading is valid.
+Take the raw value (e.g., `0xd817`), swap the bytes (to `0x17d8`), shift right by 4 (to `0x17d` = 381 decimal), multiply by 1000 and divide by 16 (381 × 1000 / 16 = 23812), and you should get approximately what `temp1_input` reports. If the driver's value and the manual calculation agree, the driver is correct and the reading is valid.
 
 ---
 
 ## Diagnostic Command Reference
 
-This collects the most useful diagnostic commands in one place for quick access when something is not working.
+Everything in one place for quick access:
 
 ```bash
 # Hardware: is the sensor visible on the I2C bus?
@@ -194,7 +196,7 @@ lsmod | grep tmp102
 # Driver: what did probe log?
 dmesg | grep tmp102
 
-# Driver: what is the full recent kernel log?
+# Driver: full recent kernel log
 dmesg | tail -30
 
 # Reading: what hwmon devices are registered?
@@ -204,4 +206,4 @@ cat /sys/class/hwmon/hwmon*/name
 cat /sys/class/hwmon/hwmon*/temp1_input
 ```
 
-One final note on general kernel debugging practice: `dmesg -w` (or `dmesg --follow`) is the kernel equivalent of `tail -f` — it shows new kernel log messages as they arrive in real time. Running it in a second terminal while you load your module in the first gives you immediate visibility into what the kernel thinks is happening, without having to repeatedly run `dmesg | tail` after each action.
+One last tip: `dmesg -w` (or `dmesg --follow`) is the kernel equivalent of `tail -f` — it shows new kernel log messages as they arrive in real time. Running it in a second terminal while you load your module in the first gives you immediate visibility into what's happening, without having to repeatedly run `dmesg | tail` after each action. Once you start using it, you'll wonder how you debugged without it.

@@ -1,3 +1,4 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 # cleanup.timer
 # --------------
 # The TIMER half of the timer pair.
@@ -43,12 +44,12 @@ OnCalendar=*-*-* 03:00:00
 # run the task shortly after the next boot to catch up on the missed run.
 # Without this, a missed window is simply skipped forever.
 # For embedded devices that may be switched off on a schedule, this is
-# usually the right behaviour.
+# almost always the right behaviour.
 Persistent=true
 
 # Additionally, run the task 5 minutes after every boot.
-# This ensures data cleanup happens even on devices that are not
-# running continuously, without waiting until 3 AM.
+# This ensures cleanup happens even on devices not running continuously,
+# without waiting until 3 AM.
 # Comment this out if you only want the scheduled daily run.
 OnBootSec=5min
 

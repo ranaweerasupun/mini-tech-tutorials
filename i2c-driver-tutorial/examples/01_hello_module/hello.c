@@ -1,14 +1,14 @@
 /*
  * hello.c — The simplest possible Linux kernel module.
  *
- * This module does nothing useful. its purpose is to make the
+ * This module does nothing useful. Its purpose is to make the
  * kernel module build process, the load/unload cycle, and `dmesg`
  * logging feel concrete before any driver complexity is introduced.
  *
  * Study this alongside docs/02-hello-module.md.
  *
  * Build:  make
- * load :   sudo insmod hello.ko
+ * Load:   sudo insmod hello.ko
  * Check:  dmesg | tail -5
  * Unload: sudo rmmod hello
  *
@@ -23,7 +23,7 @@
  * __init tells the compiler (and the kernel) that this function is
  * only needed during module initialisation. Once the module is loaded
  * and init returns, the kernel can reclaim the memory this function
- * occupied. You will see __init on every module init function.
+ * occupied. You'll see __init on every module init function.
  */
 static int __init hello_init(void)
 {
@@ -31,17 +31,13 @@ static int __init hello_init(void)
      * pr_info() is the kernel's equivalent of printf() at INFO level.
      * Output goes to the kernel ring buffer, not your terminal.
      * Read it with: dmesg | tail -5
-     *
-     * There is no newline required before the message — the ring buffer
-     * handles line separation. The trailing \n is still conventional.
      */
     pr_info("Hello from kernel space! Module loaded successfully.\n");
 
     /*
-     * Returning 0 from the init function signals success.
-     * Any non-zero return tells insmod the load failed, and the module
-     * is not added to the running kernel.
-     * Try changing this to `return -EINVAL;` and observe what insmod reports.
+     * Returning 0 signals success. Any non-zero return tells insmod
+     * the load failed, and the module is not added to the running kernel.
+     * Try changing this to `return -EINVAL;` and see what insmod reports.
      */
     return 0;
 }
@@ -58,7 +54,7 @@ static void __exit hello_exit(void)
 }
 
 /*
- * these two macros register hello_init and hello_exit as the module's
+ * These two macros register hello_init and hello_exit as the module's
  * entry and exit points. The kernel calls hello_init when you run
  * `insmod hello.ko`, and hello_exit when you run `rmmod hello`.
  */

@@ -1,3 +1,4 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 02_software_encode.py
 ---------------------
@@ -27,20 +28,20 @@ import time
 
 Gst.init(None)
 
-# ---------------------------------------------------------------
-# pipeline: webcam → decode → convert → encode → mux → file
+# -----------------------------------------------------------------
+# Pipeline: webcam → decode → convert → encode → mux → file
 # -----------------------------------------------------------------
 #
-# Reading left to right, here is what each step does:
+# Reading left to right:
 #
 #   v4l2src          Opens the camera and streams MJPEG-compressed frames.
 #
-#   image/jpeg,...   Caps filter: demand exactly this resolution and
-#                    framerate. Without it, the camera might default to
+#   image/jpeg,...   Caps filter: pin the camera to exactly this resolution
+#                    and framerate. Without it, the camera might default to
 #                    a lower resolution or different framerate.
 #
 #   jpegdec          Decompresses each MJPEG frame into raw pixel data.
-#                    The H.264 encoder cannot accept compressed input —
+#                    The H.264 encoder can't take compressed input directly —
 #                    it needs raw frames to work with.
 #
 #   videoconvert     Converts the raw frame's pixel format to whatever
@@ -62,7 +63,7 @@ Gst.init(None)
 #                    container, the raw H.264 stream is harder to work with.
 #
 #   filesink         Writes the MP4 byte stream to disk.
-#                    sync=false        → do not throttle writing to real-time;
+#                    sync=false        → don't throttle writing to real-time;
 #                                        write as fast as the disk allows.
 
 pipeline = Gst.parse_launch("""
@@ -76,14 +77,14 @@ pipeline = Gst.parse_launch("""
     ! filesink location=output_software.mp4 sync=false
 """)
 
-# ----------------------------------------------------------------
-# graceful shutdown
+# -----------------------------------------------------------------
+# Graceful shutdown
 # -----------------------------------------------------------------
 # WHY THIS MATTERS: mp4mux writes its index (the moov atom, which tells
 # media players where each frame is in the file) at the very end of
 # the file, when it receives an EOS (end-of-stream) signal. If the
 # process is killed without sending EOS first, the moov atom is never
-# written and the output file will not open in most media players.
+# written and the output file won't open in most media players.
 #
 # The correct shutdown sequence is:
 #   1. Send EOS into the pipeline (pipeline.send_event)
@@ -105,7 +106,7 @@ signal.signal(signal.SIGINT, on_sigint)
 
 # -----------------------------------------------------------------
 # Start recording
-# ----------------------------------------------------------------
+# -----------------------------------------------------------------
 pipeline.set_state(Gst.State.PLAYING)
 print("Recording with SOFTWARE encoder (x264).")
 print("Check CPU usage in htop — expect ~60-80% on one core.")

@@ -1,3 +1,4 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 # hello-node.service
 # -------------------
 # systemd service file for the Node.js HTTP server example.
@@ -11,7 +12,7 @@
 #   sudo systemctl daemon-reload
 #   sudo systemctl enable --now hello-node.service
 #
-# Test it is running:
+# Test it's running:
 #   curl http://localhost:3000
 #   journalctl -u hello-node.service -f
 

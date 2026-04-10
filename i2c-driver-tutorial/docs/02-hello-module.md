@@ -1,6 +1,8 @@
+<!-- © 2025 [Supun Akalanka Sriyananda] — CC BY-NC 4.0. Free to share with attribution, not for commercial use. -->
+
 # 02 — Your First Kernel Module
 
-The best way to make kernel development feel concrete rather than abstract is to write the simplest possible module, build it, load it into a running kernel, and watch it work. This document does exactly that. The module itself is trivial — it prints a message when loaded and another when unloaded — but the process of building and running it is the foundation everything else is built on.
+The best way to make kernel development feel real rather than abstract is to write the simplest possible module, build it, load it into a running kernel, and watch it work. That's what this document does. The module itself is trivial — it prints a message when loaded and another when unloaded — but the process of building and running it is the foundation everything else is built on. Get this working and the rest becomes much less intimidating.
 
 ---
 
@@ -14,7 +16,7 @@ Install them with:
 sudo apt install raspberrypi-kernel-headers build-essential
 ```
 
-After installation, you will find a directory at `/lib/modules/$(uname -r)/build/` that contains the headers and a partial build tree for your exact kernel version. This is what your Makefile will point at.
+After installation, there'll be a directory at `/lib/modules/$(uname -r)/build/` containing the headers and a partial build tree for your exact kernel version. This is what your Makefile will point at.
 
 Verify the headers are present:
 
@@ -22,7 +24,7 @@ Verify the headers are present:
 ls /lib/modules/$(uname -r)/build/include/linux/module.h
 ```
 
-If that file exists, you are ready. If you get "No such file or directory", the headers package did not install correctly — try `sudo apt install --reinstall raspberrypi-kernel-headers`.
+If that file exists, you're ready. If you get "No such file or directory", the headers package didn't install correctly — try `sudo apt install --reinstall raspberrypi-kernel-headers`.
 
 ---
 
@@ -84,13 +86,13 @@ MODULE_AUTHOR("Your Name");
 MODULE_DESCRIPTION("A minimal kernel module for learning");
 ```
 
-Every line of this code deserves a moment of attention because every pattern you see here reappears in the final driver.
+Every line here reappears in the final driver, so it's worth understanding each one before moving on.
 
-The `#include <linux/module.h>` header is required for every kernel module without exception — it defines the fundamental types and macros (`MODULE_LICENSE`, `module_init`, `module_exit`) that make a `.c` file a kernel module. Notice the path: `linux/module.h`, not the standard library path you would use in a regular C program. All kernel headers live under `linux/`.
+The `#include <linux/module.h>` header is required for every kernel module without exception — it defines the fundamental types and macros (`MODULE_LICENSE`, `module_init`, `module_exit`) that make a `.c` file a kernel module. Notice the path: `linux/module.h`, not the standard library path you'd use in a regular C program. All kernel headers live under `linux/`.
 
-The `pr_info()` function is one of the `pr_*` family of logging macros, which are thin wrappers around `printk()`. `pr_info()` logs at the `KERN_INFO` level, which is informational — messages that describe normal operations. `pr_err()` logs at `KERN_ERR`, used for errors. `pr_warn()` logs at `KERN_WARNING`. These messages go to the kernel ring buffer, not to your terminal. You read them with `dmesg`.
+The `pr_info()` function is one of the `pr_*` family of logging macros, thin wrappers around `printk()`. `pr_info()` logs at the `KERN_INFO` level — normal operational messages. `pr_err()` logs at `KERN_ERR`. `pr_warn()` at `KERN_WARNING`. These messages go to the kernel ring buffer, not to your terminal. You read them with `dmesg`.
 
-The `return 0` from `hello_init` is critical. If the init function returns anything other than 0, `insmod` treats the load as failed and displays an error. In the final driver, the init function (called `probe`) returns various negative error codes to signal different types of failures — `return 0` always means "everything worked."
+The `return 0` from `hello_init` is critical. If the init function returns anything other than 0, `insmod` treats the load as failed and reports an error. In the final driver, the init function (called `probe`) returns various negative error codes to signal different types of failures — but `return 0` always means success.
 
 ---
 
@@ -124,7 +126,7 @@ clean:
 	$(MAKE) -C $(KDIR) M=$(PWD) clean
 ```
 
-One thing to be aware of: the indented lines in a Makefile **must** use a tab character, not spaces. Many text editors silently convert tabs to spaces, which will cause a confusing "missing separator" error. If you use `nano`, tabs should be preserved correctly by default.
+One thing to watch out for: the indented lines in a Makefile **must** use a tab character, not spaces. Many text editors silently convert tabs to spaces, which causes a confusing "missing separator" error. If you use `nano`, tabs are preserved correctly by default.
 
 ---
 
@@ -136,23 +138,21 @@ Build it with:
 make
 ```
 
-You should see several lines of compiler output scrolling by, ending with something like:
+You should see several lines of compiler output, ending with something like:
 
 ```
   LD [M]  /home/pi/kernel-modules/hello/hello.ko
 ```
 
-The `hello.ko` file is your compiled kernel module. A few other files are also generated (`hello.mod.c`, `hello.mod.o`, `Module.symvers`, `modules.order`) — these are artefacts of the build process that the kernel build system uses to track module dependencies and symbol exports. You can ignore them for now.
+The `hello.ko` file is your compiled kernel module. A few other files also get generated (`hello.mod.c`, `hello.mod.o`, `Module.symvers`, `modules.order`) — these are artefacts of the build process that the kernel build system uses to track module dependencies and symbol exports. You can ignore them for now.
 
-If the build fails with an error about missing headers, double-check that `raspberrypi-kernel-headers` installed correctly. If it fails with "missing separator", check that the Makefile lines are indented with tabs.
-
-You can inspect some metadata about the built module before loading it:
+Before loading, you can inspect some metadata about the built module:
 
 ```bash
 modinfo hello.ko
 ```
 
-This prints the license, author, description, and the kernel version the module was built for. The "vermagic" field shows the exact kernel version — the running kernel checks this field when you try to load the module, and will refuse to load it if the version does not match.
+This prints the license, author, description, and the kernel version the module was built for. That last field — "vermagic" — is checked by the running kernel when you try to load the module. If it doesn't match the currently running kernel exactly, the load is rejected. This is one of the more common stumbling blocks when the kernel gets updated without also updating the headers.
 
 ---
 
@@ -164,7 +164,7 @@ Load the module into the running kernel:
 sudo insmod hello.ko
 ```
 
-`insmod` (insert module) injects your `.ko` file into kernel space and calls your `hello_init` function. The terminal returns to your prompt with no output — kernel log messages do not appear on the terminal by default. To see them, read the kernel ring buffer:
+`insmod` (insert module) injects your `.ko` file into kernel space and calls `hello_init`. The terminal returns to your prompt with no output — kernel log messages don't appear on the terminal by default. To see them:
 
 ```bash
 dmesg | tail -5
@@ -176,15 +176,15 @@ You should see something like:
 [12345.678901] Hello from kernel space!
 ```
 
-The number in brackets is the timestamp in seconds since boot. This message came from your `pr_info()` call inside `hello_init`.
+The number in brackets is the timestamp in seconds since boot. That message came from your `pr_info()` call inside `hello_init`.
 
-Confirm the module is currently loaded:
+Confirm the module is loaded:
 
 ```bash
 lsmod | grep hello
 ```
 
-`lsmod` lists all currently loaded kernel modules. You should see `hello` in the list with a use count of 0, meaning nothing else is currently depending on it.
+`lsmod` lists all currently loaded kernel modules. You should see `hello` with a use count of 0, meaning nothing else is currently depending on it.
 
 Now unload it:
 
@@ -192,23 +192,23 @@ Now unload it:
 sudo rmmod hello
 ```
 
-`rmmod` (remove module) calls your `hello_exit` function and then removes the module's code from kernel space. Check the log again:
+`rmmod` calls `hello_exit` and then removes the module's code from kernel space. Check the log again:
 
 ```bash
 dmesg | tail -5
 ```
 
-You should now see the goodbye message as well.
+The goodbye message should be there now.
 
-There is a small but important thing to appreciate about what just happened: your C code ran inside the Linux kernel. It used a kernel logging function. It was injected into and removed from a running production kernel without a reboot. The system remained stable the whole time. That is the normal, expected behaviour — but it is worth pausing to notice it, because when your later drivers work correctly, the same thing will be happening with vastly more complex code talking to real hardware.
+There's something worth pausing on here: your C code just ran inside the Linux kernel. It used a kernel logging function. It was injected into and removed from a running production kernel without a reboot. The system stayed completely stable throughout. That's the normal, expected behaviour — but when your later drivers work correctly, the same thing will be happening with vastly more complex code talking to real hardware.
 
 ---
 
 ## When Things Go Wrong: `dmesg` Is Your Debugger
 
-In user-space programs, you use a debugger like `gdb` when something goes wrong. In kernel development, `dmesg` is your primary diagnostic tool. Kernel modules cannot easily be attached to a debugger in the same way user programs can, so logging messages at key points in your code and reading them with `dmesg` is how you understand what is happening.
+In user-space programs you'd reach for `gdb` when something goes wrong. In kernel development, `dmesg` is your primary diagnostic tool. Kernel modules can't be attached to a debugger the same way user programs can, so logging messages at key points and reading them with `dmesg` is how you understand what's actually happening inside the kernel.
 
-A workflow you will use constantly:
+A workflow you'll use constantly:
 
 ```bash
 # Load the module
@@ -224,6 +224,6 @@ sudo rmmod my_module
 dmesg | tail -5
 ```
 
-For the temperature sensor driver, when you load it you will see a message like `TMP102 found! Initial temperature: 23.125°C` in `dmesg`. When something is wired incorrectly and the sensor is not responding, you will see `Could not read from TMP102 — check your wiring`. These messages are what connects your code to reality, and writing good, informative log messages is one of the habits that separates maintainable kernel code from code that is a nightmare to debug six months later.
+For the temperature sensor driver, when you load it you'll see a message like `TMP102 found! Initial temperature: 23.125°C` in `dmesg`. When something is wired incorrectly and the sensor isn't responding, you'll see `Could not read from TMP102 — check your wiring`. These messages are what connects your code to reality, and writing informative log messages is one of the habits that separates maintainable kernel code from code that's a nightmare to debug six months later.
 
 **Next: [03 — The Linux Device Model](03-device-model.md)**

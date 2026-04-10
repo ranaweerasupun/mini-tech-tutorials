@@ -1,3 +1,4 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 video_record.py
 ---------------
@@ -20,13 +21,13 @@ from picamera2.encoders import H264Encoder
 from picamera2.outputs import FileOutput
 import time
 
-# -----------------------------------------------------------------------
+# --------------------------------------------------------------------
 # Configuration
-# -----------------------------------------------------------------------
+# --------------------------------------------------------------------
 BITRATE = 10_000_000    # 10 Mbps — good balance of quality and file size.
                          # Increase for less compression artefacts,
                          # decrease to save disk space.
-# -----------------------------------------------------------------------
+# --------------------------------------------------------------------
 
 picam2 = Picamera2()
 
@@ -81,11 +82,11 @@ if clip_count > 0:
         print(f"  ffmpeg -i clip_{i:03d}.h264 -c copy clip_{i:03d}.mp4")
 
 
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------
 # ALTERNATIVE: Record directly to .mp4 using FfmpegOutput
-# -----------------------------------------------------------------------
+# --------------------------------------------------------------------
 # If you prefer .mp4 output without a post-processing step, replace
-# the FileOutput line with FfmpegOutput. This requires ffmpeg installed:
+# the FileOutput line with FfmpegOutput. Requires ffmpeg installed:
 #   sudo apt install ffmpeg
 #
 # from picamera2.outputs import FfmpegOutput
@@ -93,4 +94,4 @@ if clip_count > 0:
 #
 # FfmpegOutput is slightly slower to start because it launches ffmpeg
 # as a subprocess, but the output is a fully-formed, timestamped .mp4.
-# -----------------------------------------------------------------------
+# --------------------------------------------------------------------

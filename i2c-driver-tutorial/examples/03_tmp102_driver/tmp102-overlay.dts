@@ -5,7 +5,7 @@
  * tmp102-overlay.dts — Device tree overlay for the TMP102 I2C temperature sensor.
  *
  * This overlay tells the Linux kernel that a TMP102 sensor exists at
- * I2C address 0x48 on I2C bus 1 (the bus exposed on the Pi's 40-pin header).
+ * I2C address 0x48 on I2C bus 1 (the bus on the Pi's 40-pin header).
  * The "ti,tmp102" compatible string links this device description to the
  * kernel driver that handles it. See docs/04-device-trees.md for the full
  * explanation of how this works.
@@ -17,13 +17,13 @@
  *   sudo reboot
  *
  * Verify after reboot:
- *   ls /sys/bus/i2c/devices/                        # Should show 1-0048
- *   cat /sys/bus/i2c/devices/1-0048/of_node/compatible  # Should print ti,tmp102
+ *   ls /sys/bus/i2c/devices/                             # Should show 1-0048
+ *   cat /sys/bus/i2c/devices/1-0048/of_node/compatible   # Should print ti,tmp102
  */
 
 / {
     /* BCM2835 covers all Raspberry Pi SoC variants (BCM2835, BCM2836,
-     * BCM2837, BCM2711, BCM2712). This overlay is compatible with all of them. */
+     * BCM2837, BCM2711, BCM2712). This overlay works on all of them. */
     compatible = "brcm,bcm2835";
 
     fragment@0 {
@@ -48,9 +48,9 @@
                  * field in the driver's of_device_id table.
                  *
                  * The kernel searches all registered drivers for a match
-                 * when it processes this node. A single character difference
-                 * (wrong case, hyphen vs underscore, typo) will prevent the
-                 * driver from ever being called.
+                 * when it processes this node. A single character difference —
+                 * wrong case, hyphen vs underscore, any typo — will prevent
+                 * the driver from ever being called.
                  */
                 compatible = "ti,tmp102";
 

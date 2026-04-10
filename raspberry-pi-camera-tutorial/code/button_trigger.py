@@ -1,8 +1,9 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 button_trigger.py
 -----------------
 Captures a photo whenever a physical push button is pressed.
-Uses GPIO 17 (Pin 11) with a pull-up resistor configuration.
+Uses GPIO 17 (Pin 11) with a pull-down resistor configuration.
 
 Wiring:
   Button leg 1  → 3.3V (Pin 1)
@@ -10,8 +11,8 @@ Wiring:
   10kΩ resistor → between GPIO 17 and GND (Pin 6)
 
 With this wiring the pin reads LOW normally and HIGH when pressed.
-The gpiozero library handles the edge detection in a background thread,
-so the main thread just waits quietly with signal.pause().
+gpiozero handles the edge detection in a background thread, so the
+main thread just waits quietly with signal.pause().
 
 Dependencies:
   pip install gpiozero   (usually pre-installed on Raspberry Pi OS)
@@ -26,10 +27,10 @@ import signal
 import sys
 
 # --------------------------------------------------------------------
-# cconfiguration
-# -----------------------------------------------------------------------
+# Configuration
+# --------------------------------------------------------------------
 BUTTON_GPIO_PIN = 17     # BCM GPIO number (not the physical pin number)
-# -----------------------------------------------------------------------
+# --------------------------------------------------------------------
 
 picam2 = Picamera2()
 picam2.start()

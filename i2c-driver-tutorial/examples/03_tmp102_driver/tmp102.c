@@ -2,7 +2,7 @@
  * tmp102.c — Linux kernel driver for the TI TMP102 I2C temperature sensor.
  *
  * This is the complete, final driver from docs/07-tmp102-driver.md.
- * It combines everything introduced across the tutorial documents:
+ * It combines everything introduced across the tutorial:
  *
  *   docs/02  — module structure, __init/__exit, pr_info / dmesg
  *   docs/03  — probe/remove pattern, private data, devm_, mutex
@@ -42,7 +42,7 @@
 
 #define TMP102_TEMP_REG  0x00
 
-/* all per-device state lives in this struct. One instance is allocated
+/* All per-device state lives in this struct. One instance is allocated
  * per physical TMP102 sensor. See docs/03-device-model.md. */
 struct tmp102_data {
     struct i2c_client *client;
@@ -50,7 +50,7 @@ struct tmp102_data {
 };
 
 /*
- * read the temperature register and convert the raw value to millidegrees C.
+ * Read the temperature register and convert the raw value to millidegrees C.
  *
  * TMP102 register format (16 bits, big-endian from sensor):
  *   bits [15:4] — 12-bit two's complement temperature, 0.0625°C per count

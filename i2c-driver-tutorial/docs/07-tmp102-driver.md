@@ -1,6 +1,8 @@
+<!-- © 2025 [Supun Akalanka Sriyananda] — CC BY-NC 4.0. Free to share with attribution, not for commercial use. -->
+
 # 07 — Building the TMP102 Driver
 
-Every concept introduced in the previous six documents now converges here. This document walks through the complete TMP102 driver line by line, explaining how each piece connects to what you already know. By the end, none of the code should feel unfamiliar — you have seen every pattern before, just not assembled together in a single file.
+Every concept introduced in the previous six documents converges here. This document walks through the complete TMP102 driver line by line, with every piece tied back to where you learned it. By the end, none of the code should feel unfamiliar — you've seen every pattern before, just not assembled together in a single file.
 
 ---
 
@@ -22,8 +24,7 @@ which dtc
 sudo i2cdetect -y 1   # Should show 48 in the grid
 ```
 
-If `i2cdetect` does not show `48`, stop here and re-check your wiring and
-I2C configuration from document 05 before continuing.
+If `i2cdetect` doesn't show `48`, stop here and re-check your wiring and I2C configuration from document 05 before continuing. There's nothing in the driver code to fix if the hardware isn't responding.
 
 ---
 
@@ -37,8 +38,7 @@ cd ~/kernel-modules/tmp102
 nano tmp102.c
 ```
 
-Here is the complete driver. Read the comments as you type it — they are part
-of the teaching, not just decoration.
+Here is the complete driver. Read the comments as you type it — they're part of the teaching, not decoration.
 
 ```c
 /*
@@ -55,7 +55,7 @@ of the teaching, not just decoration.
 
 /*
  * Each #include pulls in the declarations for a specific part of the kernel API.
- * You only need to include what you actually use — the kernel does not have a
+ * You only need to include what you actually use — the kernel doesn't have a
  * "kitchen sink" header like <stdio.h> that covers everything.
  */
 #include <linux/module.h>       /* module_init, module_exit, MODULE_* macros */
@@ -174,7 +174,6 @@ static ssize_t temp_show(struct device *dev,
     temp = tmp102_read_temperature(data->client);
     mutex_unlock(&data->lock);
 
-    /* If the read failed, propagate the error to the caller. */
     if (temp < 0)
         return temp;
 
@@ -203,8 +202,8 @@ static SENSOR_DEVICE_ATTR(temp1_input, 0444, temp_show, NULL, 0);
 
 /*
  * Collect all attributes into a NULL-terminated array, then use
- * ATTRIBUTE_GROUPS to wrap it into the structure devm_hwmon_device_register_
- * with_groups expects.
+ * ATTRIBUTE_GROUPS to wrap it into the structure the registration
+ * function expects.
  *
  * ATTRIBUTE_GROUPS(tmp102) generates:
  *   - struct attribute_group  tmp102_group  (singular)
@@ -278,8 +277,8 @@ static int tmp102_probe(struct i2c_client *client,
      * Take a test reading before committing to registration.
      * This verifies the sensor is physically present and responding
      * before we claim everything is working.
-     * If the sensor is not wired correctly, we fail here with a clear
-     * message rather than registering a device that cannot produce data.
+     * If the sensor isn't wired correctly, we fail here with a clear
+     * message rather than registering a device that can't produce data.
      */
     initial_temp = tmp102_read_temperature(client);
     if (initial_temp < 0) {
@@ -315,7 +314,7 @@ static int tmp102_probe(struct i2c_client *client,
 /*
  * remove - Called when the device is removed or the module is unloaded.
  *
- * Because every resource in probe was allocated with devm_, there is
+ * Because every resource in probe was allocated with devm_, there's
  * nothing to manually clean up here. The kernel's devm infrastructure
  * releases everything in reverse order automatically.
  *
@@ -379,9 +378,8 @@ static struct i2c_driver tmp102_driver = {
  * i2c_add_driver (to register tmp102_driver with the I2C bus subsystem) on
  * load, and i2c_del_driver (to unregister it) on unload.
  *
- * This replaces the need to write init/exit functions manually for
- * drivers that only register a single driver struct on init and
- * unregister it on exit.
+ * This replaces writing init/exit functions manually for drivers that only
+ * register a single driver struct on init and unregister it on exit.
  */
 module_i2c_driver(tmp102_driver);
 
@@ -421,7 +419,7 @@ make
 dtc -@ -I dts -O dtb -o tmp102-overlay.dtbo tmp102-overlay.dts
 sudo cp tmp102-overlay.dtbo /boot/overlays/
 
-# Add the overlay to boot config (only once — check it is not already there)
+# Add the overlay to boot config (only once — check it's not already there)
 grep -q "tmp102-overlay" /boot/firmware/config.txt || \
     echo "dtoverlay=tmp102-overlay" | sudo tee -a /boot/firmware/config.txt
 
@@ -463,10 +461,10 @@ sudo rmmod tmp102
 
 ---
 
-## What You Have Built
+## What You've Built
 
 The driver you just wrote is a real, production-pattern Linux kernel driver. It implements the probe model correctly, uses `devm_` memory management throughout, protects hardware access with a mutex, integrates with the hwmon subsystem using standardised attribute names, and works with tools that know nothing about the TMP102 specifically. Every pattern in it appears in drivers throughout the Linux kernel source tree.
 
-The natural next steps from here are adding the TMP102's alert threshold registers (which would add `temp1_min` and `temp1_max` attributes), implementing one-shot mode to save power by putting the sensor to sleep between readings, or applying the same patterns to a different I2C sensor — nearly all of them follow the identical structure you have just learned.
+From here, natural next steps would be adding the TMP102's alert threshold registers (which would add `temp1_min` and `temp1_max` attributes), implementing one-shot mode to save power by putting the sensor to sleep between readings, or applying the same patterns to a different I2C sensor — nearly all of them follow the identical structure you've just learned.
 
 **Next: [08 — Troubleshooting](08-troubleshooting.md)**

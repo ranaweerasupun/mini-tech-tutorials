@@ -1,3 +1,4 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 04_pipeline_builder.py
 ----------------------
@@ -10,7 +11,7 @@ This style is more verbose than parse_launch, but it gives you:
   - Type-checked property setting (typos fail at set_property, not at runtime)
   - A natural place to add conditional logic (different settings per camera, etc.)
 
-Reading this script alongside 03_hardware_encode.py shows that both approaches
+Reading this alongside 03_hardware_encode.py shows that both approaches
 produce an identical pipeline. Use parse_launch for simple fixed pipelines;
 use element-by-element building for anything that needs runtime flexibility.
 
@@ -70,24 +71,24 @@ def create_pipeline(
     Create and return a fully configured hardware encoding pipeline.
 
     Accepting configuration as parameters rather than hardcoding it
-    is good practice: it makes the function reusable and testable,
-    and it documents exactly what can vary about the pipeline.
+    makes the function reusable and testable, and documents exactly
+    what can vary about the pipeline.
 
     Returns a Gst.Pipeline in NULL state, ready to be started with
     set_state(Gst.State.PLAYING).
     """
 
-    # ----------------------------------------------------------------
+    # -----------------------------------------------------------------
     # Create the pipeline container
-    # -----------------------------------------------------------
+    # -----------------------------------------------------------------
     # Gst.Pipeline is a special bin (container) that also manages a
     # shared clock for all elements inside it. Every element you create
     # must be added to this pipeline before it can be linked to others.
     pipeline = Gst.Pipeline.new("hardware-encode-pipeline")
 
-    # -------------------------------------------------------------
+    # -----------------------------------------------------------------
     # Create each element
-    # ----------------------------------------------------------------
+    # -----------------------------------------------------------------
     # Gst.ElementFactory.make(element_name, instance_name)
     # The instance_name is a label you can use to retrieve the element
     # later with pipeline.get_by_name("label"). Choose descriptive names.
@@ -105,8 +106,6 @@ def create_pipeline(
     all_elements = [source, decoder, converter, encoder, parser, muxer, sink]
     for elem in all_elements:
         if elem is None:
-            # The element name is not directly available here, but we can
-            # check which one is None by looking at the list position.
             idx = all_elements.index(elem)
             names = ["v4l2src", "jpegdec", "v4l2convert", "v4l2h264enc",
                      "h264parse", "mp4mux", "filesink"]
@@ -115,9 +114,9 @@ def create_pipeline(
             print("       Run: sudo apt install gstreamer1.0-plugins-bad gstreamer1.0-v4l2")
             sys.exit(1)
 
-    # ----------------------------------------------------------------
+    # -----------------------------------------------------------------
     # Configure element properties
-    # --------------------------------------------------------------
+    # -----------------------------------------------------------------
     # set_property(property_name, value) is the Python equivalent of
     # writing key=value in a gst-launch-1.0 pipeline string.
     # Property names use hyphens (not underscores) as GStreamer convention.
@@ -129,34 +128,34 @@ def create_pipeline(
     source.set_property("do-timestamp", True)
 
     # Hardware encoder: the extra-controls string passes V4L2 kernel controls.
-    #   repeat_sequence_header=1   → embed SPS/PPS headers regularly (not just at start)
-    #   h264_i_frame_period=30     → keyframe every 30 frames (= every 1 second at 30fps)
+    #   repeat_sequence_header=1  → embed SPS/PPS headers regularly (not just at start)
+    #   h264_i_frame_period=30    → keyframe every 30 frames (= every 1 second at 30fps)
     encoder.set_property(
         "extra-controls",
         "controls,repeat_sequence_header=1,h264_i_frame_period=30"
     )
 
-    # H264parse: config-interval=1 re-inserts the stream headers before
-    # every keyframe, making the output file seek-friendly.
+    # h264parse: config-interval=1 re-inserts stream headers before every
+    # keyframe, making the output file seek-friendly.
     parser.set_property("config-interval", 1)
 
-    # Filesink: where to write the output file.
+    # filesink: where to write the output.
     # sync=False means write as fast as possible without throttling to
-    # real-time — this prevents dropped frames on slow storage.
+    # real-time — prevents dropped frames on slow storage.
     sink.set_property("location", output_path)
     sink.set_property("sync", False)
 
-    # --------------------------------------------------------------
+    # -----------------------------------------------------------------
     # Add all elements to the pipeline
-    # ----------------------------------------------------------------
+    # -----------------------------------------------------------------
     # Elements must be added to the pipeline BEFORE linking. Adding
     # attaches them to the pipeline's clock, memory pool, and message bus.
     for elem in all_elements:
         pipeline.add(elem)
 
-    # ----------------------------------------------------------------
+    # -----------------------------------------------------------------
     # Link elements together
-    # ----------------------------------------------------------
+    # -----------------------------------------------------------------
     # Plain link() lets GStreamer negotiate the format automatically.
     # link_filtered() inserts an explicit caps constraint between two elements,
     # preventing GStreamer from picking an unexpected or incompatible format.
@@ -168,7 +167,7 @@ def create_pipeline(
     )
     source.link_filtered(decoder, mjpeg_caps)
 
-    # Decoder → converter: no constraint needed; videoconvert/v4l2convert accept
+    # Decoder → converter: no constraint needed; v4l2convert accepts
     # whatever pixel format jpegdec produces.
     decoder.link(converter)
 
@@ -193,7 +192,7 @@ def create_pipeline(
     return pipeline
 
 
-# ----------------------------------------------------------------
+# -----------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------
 set_encoder_bitrate(2_000_000)   # 2 Mbps

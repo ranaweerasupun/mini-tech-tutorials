@@ -1,6 +1,9 @@
 # systemd Services Tutorial
 
-A beginner-friendly, open-source guide to running your applications as **systemd services** on Linux — with a focus on Raspberry Pi and other embedded systems. Learn how to turn any Python or Node.js script into a reliable, self-starting, self-recovering system service.
+[![License: MIT](https://img.shields.io/badge/Code-MIT-blue.svg)](LICENSE)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/Content-CC--BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
+A practical guide to running your applications as systemd services on Linux — with a focus on Raspberry Pi and other embedded systems. Turn any Python or Node.js script into a reliable, self-starting, self-recovering system service.
 
 ---
 
@@ -14,13 +17,13 @@ That gap between "works when I run it" and "runs automatically and reliably fore
 
 ## What You'll Learn
 
-By the end of this tutorial you will understand what systemd is and how it fits into Linux boot, how to write a service file from scratch, how to make services restart themselves after crashes, how to declare dependencies so things start in the right order, how to manage configuration and secrets through environment files, how to read and filter service logs, and how to replace cron jobs with systemd timers.
+How systemd fits into the Linux boot process, how to write a service file from scratch, how to make services restart themselves after crashes, how to declare dependencies so things start in the right order, how to manage configuration and secrets through environment files, how to read and filter service logs, and how to replace cron jobs with systemd timers.
 
 ---
 
 ## Tutorial Structure
 
-Work through the documents in order if you are new to systemd. If you have some experience, jump to the section you need.
+Work through the documents in order if you're new to systemd. If you have some experience, jump to the section you need.
 
 | # | Document | What it covers |
 |---|----------|----------------|
@@ -92,16 +95,22 @@ All example service files and application scripts live in the [`examples/`](exam
 - Any Linux system using systemd (Raspberry Pi OS, Ubuntu, Debian, Fedora, and most others)
 - Tested on Raspberry Pi OS Bookworm and Ubuntu 22.04+
 - Python 3 for the Python examples
-- Node.js 18+ for the Node.js example (install with `sudo apt install nodejs`)
+- Node.js 18+ for the Node.js example (`sudo apt install nodejs`)
 
 ---
 
 ## Compatibility Note
 
-Every concept in this tutorial works on any modern Linux distribution that uses systemd — which is virtually all of them. The examples use `User=pi` and paths like `/home/pi/` because the primary audience is Raspberry Pi users, but substituting your own username and paths works identically on Ubuntu, Debian, Fedora, or any other systemd-based distro.
+Every concept here works on any modern Linux distribution that uses systemd — which is virtually all of them. The examples use `User=pi` and paths like `/home/pi/` because the primary audience is Raspberry Pi users, but substituting your own username and paths works identically on Ubuntu, Debian, Fedora, or any other systemd-based distro.
 
 ---
 
 ## License
 
-Released under the [MIT License](LICENSE). All examples are free to use, adapt, and share.
+**Code** (all `.py`, `.js`, `.service`, `.timer` files) — [MIT License](LICENSE)
+**Tutorial content** (all `.md` files and written documentation) — [CC BY-NC 4.0](LICENSE)
+
+Code is free to use in your own projects without restriction.
+The written tutorials may be shared and adapted for non-commercial purposes with attribution. They may not be repackaged or sold.
+
+© 2025 [Supun Akalanka Sriyananda]

@@ -1,3 +1,4 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 cleanup.py
 ----------
@@ -5,7 +6,7 @@ A maintenance script designed to be run on a schedule by a systemd timer.
 Deletes files older than MAX_AGE_DAYS from TARGET_DIR.
 
 This is a realistic example of a periodic task that many embedded devices
-need — clearing old logs, sensor data, or temporary files to prevent the
+need — clearing old logs, sensor data, or temporary files to prevent
 storage from filling up over time.
 
 Key design points for a timer-triggered script:
@@ -81,14 +82,14 @@ def main():
                 removed += 1
             else:
                 # File is recent enough to keep — log at debug level
-                # so it does not clutter the output on busy directories
+                # so it doesn't clutter the output on busy directories
                 logger.debug(f"  Keeping: {filename}")
 
         except OSError as e:
             logger.error(f"  Error removing {filename}: {e}")
             errors += 1
 
-    # Summary log — always written so there is a clear record of each run
+    # Summary log — always written so there's a clear record of each run
     logger.info(
         f"Cleanup complete: {removed} removed, {skipped} non-file entries skipped, "
         f"{errors} error(s)"

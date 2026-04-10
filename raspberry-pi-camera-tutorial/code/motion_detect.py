@@ -1,3 +1,4 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 motion_detect.py
 ----------------
@@ -12,7 +13,7 @@ How it works:
 Tuning tips:
   - MOTION_THRESHOLD: how different a pixel needs to be to count as 'changed'.
     Too low → false triggers from sensor noise and subtle lighting shifts.
-    Too high → misses real motion. Start at 25 and adjust.
+    Too high → misses real motion. Start at 25 and adjust from there.
 
   - MOTION_MIN_PIXELS: how many changed pixels trigger an alert.
     Small value → sensitive (detects even small objects / insects).
@@ -32,14 +33,14 @@ import time
 import os
 
 # --------------------------------------------------------------------
-# configuration — tune these for your environment
-# -----------------------------------------------------------------------
+# Configuration — tune these for your environment
+# --------------------------------------------------------------------
 MOTION_THRESHOLD  = 25       # Per-pixel change to count as 'moved'
 MOTION_MIN_PIXELS = 5000     # Minimum changed pixels to trigger
 CAPTURE_INTERVAL  = 0.1      # Seconds between frame comparisons
 COOLDOWN_SECONDS  = 3        # Seconds to wait after a trigger before re-arming
 OUTPUT_DIR        = "motion_captures"
-# ---------------------------------------------------------------------
+# --------------------------------------------------------------------
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

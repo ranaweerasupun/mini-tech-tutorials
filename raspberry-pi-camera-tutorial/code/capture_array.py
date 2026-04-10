@@ -1,13 +1,14 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 capture_array.py
 ----------------
-Captures an image directly into a NumPy array instead of saving to a file.
+Captures an image directly into a numpy array instead of saving to a file.
 This is the gateway to computer vision — once you have the image as an
 array, you can analyse every pixel in Python.
 
-This script captures a frame, inspects its structure, calculates some basic
-statistics, makes a simple decision based on brightness, then saves the
-array as a JPEG to confirm it looks correct.
+This script captures a frame, inspects its structure, calculates some
+basic statistics, makes a simple decision based on brightness, then
+saves the array as a JPEG to confirm it looks correct.
 
 Run: python3 capture_array.py
 """
@@ -39,7 +40,7 @@ print(f"  Data type: {image_array.dtype}")      # uint8 = values 0-255
 print(f"  Min value: {image_array.min()}")      # 0 = black
 print(f"  Max value: {image_array.max()}")      # 255 = max brightness
 
-# --- Basic statistics ------
+# --- Basic statistics ---
 # .mean() across the whole array gives average brightness across all pixels
 # and all three colour channels combined.
 avg_brightness = image_array.mean()
@@ -57,7 +58,7 @@ print(f"  Blue channel average:  {b_mean:.1f}")
 
 # --- Make a decision based on pixel data ---
 # This is a tiny example of what becomes motion detection, face recognition,
-# object classification, etc. — you just have more sophisticated logic.
+# object classification, etc. — just with more sophisticated logic.
 print(f"\n=== Scene Assessment ===")
 if avg_brightness < 60:
     print("  Scene is quite dark — consider increasing lighting or exposure.")
@@ -72,4 +73,4 @@ img.save("array_capture.jpg")
 print("\n  Saved array_capture.jpg for visual confirmation.")
 
 picam2.stop()
-print("\nDone! The image array is ready for any further processing you need.")
+print("\nDone!")

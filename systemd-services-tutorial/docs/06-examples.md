@@ -1,12 +1,14 @@
+<!-- © 2025 [Supun Akalanka Sriyananda] — CC BY-NC 4.0. Free to share with attribution, not for commercial use. -->
+
 # 06 — Practical Examples
 
-This document walks through four complete, working examples that put everything from the previous sections into practice. Each example includes a full service file with every line explained, along with the application script it manages. All source files are in the [`examples/`](../examples/) folder of this repository.
+Four complete, working examples that put everything from the previous documents into practice. Each one includes a full service file with every line explained, along with the application script it manages. All source files are in the [`examples/`](../examples/) folder of this repository.
 
 ---
 
 ## Example 1: Python Script as a Service
 
-This is the most common starting point. The example runs a Python script that logs a heartbeat message every ten seconds — simple enough to understand immediately, but structured like a real long-running service.
+The most common starting point. The example runs a Python script that logs a heartbeat message every ten seconds — simple enough to understand immediately, but structured like a real long-running service.
 
 The application script at `examples/python-service/hello_service.py` uses Python's `logging` module to write structured messages to stdout, which systemd captures into the journal automatically.
 
@@ -69,7 +71,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now hello-python.service
 ```
 
-Verify it is running and watch the heartbeat messages appear:
+Verify it's running and watch the heartbeat messages appear:
 
 ```bash
 sudo systemctl status hello-python.service
@@ -80,7 +82,7 @@ journalctl -u hello-python.service -f
 
 ## Example 2: Node.js Application as a Service
 
-The exact same systemd concepts apply to any language or runtime — Python is not special here. This example shows a minimal Node.js HTTP server registered as a service, demonstrating that the service file structure is essentially identical regardless of what language runs underneath.
+The exact same systemd concepts apply to any language or runtime — Python isn't special here. This example shows a minimal Node.js HTTP server registered as a service, demonstrating that the service file structure is essentially identical regardless of what language runs underneath.
 
 The application at `examples/nodejs-service/server.js` is a small HTTP server that responds to every request with a timestamp:
 
@@ -112,7 +114,7 @@ process.on("SIGTERM", () => {
 });
 ```
 
-The SIGTERM handler is worth paying attention to. When you run `systemctl stop`, systemd sends a SIGTERM signal to the process, giving it a chance to shut down cleanly before it is force-killed. Without this handler, Node.js would terminate abruptly — dropping any in-flight requests and potentially leaving resources in an inconsistent state. The handler here closes the HTTP server gracefully before exiting, which is the correct way to handle shutdown for any network service.
+The SIGTERM handler is worth paying attention to. When you run `systemctl stop`, systemd sends a SIGTERM signal to the process, giving it a chance to shut down cleanly before it's force-killed. Without this handler, Node.js would terminate abruptly — dropping any in-flight requests and potentially leaving resources in an inconsistent state. The handler here closes the HTTP server gracefully before exiting, which is the correct way to handle shutdown for any network service.
 
 The service file at `examples/nodejs-service/hello-node.service` looks almost identical to the Python version, with only the `ExecStart` command changed:
 
@@ -149,7 +151,7 @@ WantedBy=multi-user.target
 
 `TimeoutStopSec=15` is a useful addition for any network server. It tells systemd to wait up to 15 seconds after sending SIGTERM before giving up and sending SIGKILL. This gives the SIGTERM handler in `server.js` time to finish handling active connections before the process is force-killed.
 
-Find the path to Node.js on your system with `which node`. On Raspberry Pi OS installed via `apt`, it is typically `/usr/bin/node`. If you installed Node.js via `nvm` or another version manager, use the full path to that installation's node binary instead.
+Find the path to Node.js on your system with `which node`. On Raspberry Pi OS installed via `apt`, it's typically `/usr/bin/node`. If you installed via `nvm` or another version manager, use the full path to that installation's node binary instead.
 
 ---
 
@@ -201,15 +203,14 @@ if __name__ == "__main__":
     main()
 ```
 
-The environment file lives at `/etc/env-service/config.env` with restricted permissions so only root can read it:
+Create the environment file with restricted permissions:
 
 ```bash
-# Create the directory and file
 sudo mkdir -p /etc/env-service
 sudo nano /etc/env-service/config.env
 ```
 
-The file contents follow a simple KEY=VALUE format:
+The file contents use a simple KEY=VALUE format:
 
 ```bash
 # /etc/env-service/config.env
@@ -239,8 +240,8 @@ User=pi
 Group=pi
 WorkingDirectory=/home/pi/systemd-services-tutorial/examples/env-service
 
-# Load secrets from a separately protected file
-# The leading '-' means: if the file is missing, log a warning but still start
+# Load secrets from a separately protected file.
+# The leading '-' means: if the file is missing, log a warning but still start.
 EnvironmentFile=-/etc/env-service/config.env
 
 ExecStart=/usr/bin/python3 app_with_config.py
@@ -254,15 +255,15 @@ SyslogIdentifier=env-service
 WantedBy=multi-user.target
 ```
 
-One thing to appreciate about this pattern: if you ever need to rotate a credential — update an API key, change a database password — you edit only `/etc/env-service/config.env`, then restart the service with `sudo systemctl restart env-service.service`. You never touch the service file itself, and the new values are picked up immediately on restart.
+One thing worth appreciating about this pattern: if you ever need to rotate a credential — update an API key, change a database password — you edit only `/etc/env-service/config.env`, then restart the service with `sudo systemctl restart env-service.service`. You never touch the service file itself, and the new values are picked up immediately on restart.
 
 ---
 
 ## Example 4: Scheduled Tasks with systemd Timers
 
-This is arguably the most useful thing in this entire tutorial for embedded systems developers. A **systemd timer** is the modern replacement for cron — it runs a service on a schedule, but with all of systemd's dependency handling, logging, and error management baked in. When a cron job fails silently, you often do not know for days. When a timer-triggered service fails, it shows up in `systemctl status` and `journalctl` exactly like any other failed service.
+This is arguably the most useful thing in this entire tutorial for embedded systems developers. A **systemd timer** is the modern replacement for cron — it runs a service on a schedule, but with all of systemd's dependency handling, logging, and error management built in. When a cron job fails silently, you often don't know for days. When a timer-triggered service fails, it shows up in `systemctl status` and `journalctl` exactly like any other failed service.
 
-A timer in systemd is actually two unit files working together: a `.service` file that describes what to run, and a `.timer` file that describes when to run it.
+A timer in systemd is two unit files working together: a `.service` file that describes what to run, and a `.timer` file that describes when to run it.
 
 The application at `examples/timer-service/cleanup.py` is a maintenance script that deletes files older than a configurable number of days from a specific directory — a realistic task that many embedded devices need to run periodically to avoid filling up storage:
 
@@ -305,7 +306,7 @@ if __name__ == "__main__":
     main()
 ```
 
-The service file at `examples/timer-service/cleanup.service` describes what to run. Notice that it has no `[Install]` section and no `WantedBy` — it is activated exclusively by the timer, not by a boot target:
+The service file at `examples/timer-service/cleanup.service` describes what to run. Notice there's no `[Install]` section and no `WantedBy` — it's activated exclusively by the timer, not by a boot target:
 
 ```ini
 [Unit]
@@ -324,7 +325,7 @@ StandardError=journal
 SyslogIdentifier=cleanup-task
 ```
 
-`Type=oneshot` is important here. It tells systemd that this service is expected to start, run to completion, and exit — rather than run as a long-running daemon. Systemd waits for the process to exit before considering the service "done," which ensures the timer does not fire again while a previous run is still in progress.
+`Type=oneshot` is important here. It tells systemd this service is expected to start, run to completion, and exit — rather than run as a long-running daemon. systemd waits for the process to exit before considering the service "done," which ensures the timer doesn't fire again while a previous run is still in progress.
 
 The timer file at `examples/timer-service/cleanup.timer` describes when to run the service. It must have the same base name as the service file:
 
@@ -361,13 +362,13 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now cleanup.timer
 ```
 
-To see all active timers and when they will next fire, run:
+To see all active timers and when they'll next fire:
 
 ```bash
 systemctl list-timers
 ```
 
-To test the service immediately without waiting for the scheduled time, you can trigger it manually:
+To test the service immediately without waiting for the scheduled time:
 
 ```bash
 sudo systemctl start cleanup.service

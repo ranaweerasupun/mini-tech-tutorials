@@ -1,11 +1,12 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 hello_service.py
 ----------------
 A minimal long-running Python service for learning systemd.
 Logs a heartbeat message every 10 seconds so you can watch it
-working in real time with: journalctl -u hello-python.service -f
+in real time with: journalctl -u hello-python.service -f
 
-This script intentionally does nothing useful — it is designed
+This script intentionally does nothing useful — it's designed
 purely to demonstrate the lifecycle of a process that systemd
 starts, monitors, and restarts if it dies.
 
@@ -22,7 +23,7 @@ import time
 
 # Write logs to stdout so systemd's journal captures them automatically.
 # The format includes a timestamp so log entries are self-contained
-# even if you are reading them in a raw log file rather than journalctl.
+# even if you're reading them in a raw log file rather than journalctl.
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s: %(message)s",
@@ -31,7 +32,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Track whether a shutdown has been requested.
-# This allows the main loop to finish its current work cleanly
+# This lets the main loop finish its current work cleanly
 # rather than being interrupted mid-task by a kill signal.
 shutdown_requested = False
 
@@ -46,7 +47,7 @@ def handle_shutdown(signum, frame):
 def main():
     # Register the graceful shutdown handler for SIGTERM.
     # When you run 'systemctl stop', systemd sends SIGTERM first,
-    # giving the process a chance to clean up. If we do not handle it,
+    # giving the process a chance to clean up. If we don't handle it,
     # the process is forcibly killed after TimeoutStopSec seconds.
     signal.signal(signal.SIGTERM, handle_shutdown)
 

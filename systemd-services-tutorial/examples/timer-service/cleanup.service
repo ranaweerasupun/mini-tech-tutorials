@@ -1,11 +1,12 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 # cleanup.service
 # ----------------
 # The SERVICE half of the timer pair.
 # This file describes WHAT to run.
 # The companion cleanup.timer describes WHEN to run it.
 #
-# Notice there is no [Install] section and no WantedBy directive.
-# This service is never enabled directly — it is activated exclusively
+# There's no [Install] section and no WantedBy directive here.
+# This service is never enabled directly — it's activated exclusively
 # by the timer. Enabling the timer (not the service) is what registers
 # it with the boot system.
 #
@@ -28,8 +29,8 @@ Environment="CLEANUP_DIR=/home/pi/data"
 Environment="MAX_AGE_DAYS=7"
 
 # Type=oneshot: run once, wait for exit, then mark complete.
-# systemd will not consider the service "done" until the script exits,
-# ensuring the timer does not trigger a second run while one is active.
+# systemd won't consider the service "done" until the script exits,
+# ensuring the timer doesn't trigger a second run while one is active.
 Type=oneshot
 
 ExecStart=/usr/bin/python3 cleanup.py

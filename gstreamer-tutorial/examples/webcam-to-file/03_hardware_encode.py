@@ -1,13 +1,14 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 03_hardware_encode.py
 ---------------------
 Captures 720p30 video from a USB webcam and saves it to an MP4 file
 using the Raspberry Pi 5's built-in VideoCore hardware H.264 encoder.
 
-This script is functionally identical to 02_software_encode.py — same
-resolution, same output format, same controls — but replaces the software
-x264 encoder with the hardware v4l2h264enc encoder. The result is the
-same output file with roughly 60-65% less CPU usage.
+Functionally identical to 02_software_encode.py — same resolution, same
+output format, same controls — but replaces the software x264 encoder with
+the hardware v4l2h264enc encoder. The result is the same output file with
+roughly 60-65% less CPU usage.
 
 Run:    python3 03_hardware_encode.py
 Stop:   Ctrl+C
@@ -17,9 +18,9 @@ Output: output_hardware.mp4 in the current directory
 CPU usage expectation: ~15-25% total (vs 60-80% with software encoding).
 
 NOTE: This script is specific to the Raspberry Pi 5. The v4l2h264enc
-element relies on the VideoCore VII hardware encoder block that is present
-in the BCM2712 chip. It will not work on other Linux systems unless they
-have their own V4L2 hardware encoder (and even then, may need adjustment).
+element relies on the VideoCore VII hardware encoder block in the BCM2712
+chip. It won't work on other Linux systems unless they have their own V4L2
+hardware encoder.
 """
 
 import gi
@@ -37,17 +38,14 @@ def set_encoder_bitrate(bitrate_bps: int) -> None:
     """
     Set the hardware encoder's target bitrate using v4l2-ctl.
 
-    The v4l2h264enc GStreamer element does not expose bitrate as a standard
+    The v4l2h264enc GStreamer element doesn't expose bitrate as a standard
     GStreamer property. Instead, the hardware encoder is configured through
     V4L2 kernel controls, which v4l2-ctl can set directly.
 
     We call this before the pipeline starts so the bitrate is already
     configured when the encoder element opens the hardware device.
-
-    Args:
-        bitrate_bps: Target bitrate in bits per second (e.g. 2000000 = 2 Mbps)
     """
-    # find the encoder device. The hardware codec shows up as a V4L2 device
+    # Find the encoder device. The hardware codec shows up as a V4L2 device
     # but we need the specific /dev/videoN number that corresponds to the
     # encoder function (not the camera, not the decoder).
     result = subprocess.run(
@@ -68,7 +66,7 @@ def set_encoder_bitrate(bitrate_bps: int) -> None:
         if in_codec_section and "/dev/video" in line:
             encoder_device = line.strip()
             break
-        # an empty line means we have left the codec section
+        # An empty line means we've left the codec section
         if in_codec_section and line.strip() == "":
             break
 
@@ -86,8 +84,8 @@ def set_encoder_bitrate(bitrate_bps: int) -> None:
     print(f"Set hardware encoder bitrate: {bitrate_bps // 1000} kbps on {encoder_device}")
 
 
-# ----------------------------------------------------------------
-# set bitrate before building the pipeline
+# -----------------------------------------------------------------
+# Set bitrate before building the pipeline
 # -----------------------------------------------------------------
 set_encoder_bitrate(2_000_000)   # 2 Mbps — same as the software example
 
@@ -121,10 +119,11 @@ pipeline = Gst.parse_launch("""
     ! filesink location=output_hardware.mp4 sync=false
 """)
 
-# --------------------------------------------------------------
-# Graceful shutdown (identical reason as in 02_software_encode.py:
-# mp4mux needs an EOS signal to write the file index correctly)
 # -----------------------------------------------------------------
+# Graceful shutdown
+# -----------------------------------------------------------------
+# Same reason as in 02_software_encode.py: mp4mux needs an EOS signal
+# to write the file index correctly. See that script for the full explanation.
 def on_sigint(sig, frame):
     print("\nStopping... sending EOS to finalise the MP4 file.")
     pipeline.send_event(Gst.Event.new_eos())
@@ -132,8 +131,8 @@ def on_sigint(sig, frame):
 signal.signal(signal.SIGINT, on_sigint)
 
 # -----------------------------------------------------------------
-# start recording
-# -------------------------------------------------------------
+# Start recording
+# -----------------------------------------------------------------
 pipeline.set_state(Gst.State.PLAYING)
 print("Recording with HARDWARE encoder (v4l2h264enc).")
 print("Check CPU usage in htop — expect ~15-25% total.")
@@ -141,8 +140,8 @@ print("Output: output_hardware.mp4")
 print("Press Ctrl+C to stop and finalise the file.\n")
 
 # -----------------------------------------------------------------
-# bus polling loop
-# -------------------------------------------------------------
+# Bus polling loop
+# -----------------------------------------------------------------
 bus = pipeline.get_bus()
 
 while True:

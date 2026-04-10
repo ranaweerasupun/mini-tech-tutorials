@@ -1,14 +1,16 @@
+<!-- © 2025 [Supun Akalanka Sriyananda] — CC BY-NC 4.0. Free to share with attribution, not for commercial use. -->
+
 # 05 — Logging with journald
 
-One of the most underappreciated benefits of running your application as a systemd service is that you get a powerful, structured logging system essentially for free. Any text your application prints to standard output or standard error is automatically captured, timestamped, and stored in the **journal** — systemd's centralised log database. This document explains how to read, filter, and manage those logs, and how to configure the journal to be a responsible citizen on embedded devices with limited storage.
+One of the most underappreciated benefits of running your application as a systemd service is that you get a powerful, structured logging system essentially for free. Any text your application prints to stdout or stderr is automatically captured, timestamped, and stored in the **journal** — systemd's centralised log database. This document covers how to read, filter, and manage those logs, and how to configure the journal to be a responsible citizen on embedded devices with limited storage.
 
 ---
 
 ## How systemd Captures Your Logs
 
-When your service is running, systemd intercepts everything written to `stdout` and `stderr` and passes it to `systemd-journald`, the journal daemon. You do not need to change anything in your application code — a plain `print("sensor reading: 42.3")` in Python becomes a structured journal entry with a precise timestamp, the service name, the process ID, and the message text all stored together.
+When your service is running, systemd intercepts everything written to `stdout` and `stderr` and passes it to `systemd-journald`. You don't need to change anything in your application code — a plain `print("sensor reading: 42.3")` in Python becomes a structured journal entry with a precise timestamp, the service name, the process ID, and the message text all stored together.
 
-The only service file configuration required to make this explicit is:
+The only service file configuration needed to make this explicit is:
 
 ```ini
 StandardOutput=journal
@@ -16,7 +18,7 @@ StandardError=journal
 SyslogIdentifier=my-app
 ```
 
-`StandardOutput=journal` and `StandardError=journal` are actually the defaults in modern systemd, so you do not strictly need to specify them. But being explicit makes the service file self-documenting — anyone reading it can immediately see where the logs go. `SyslogIdentifier` sets a short tag that is attached to every journal entry from this service, making it easy to filter for your specific application even if multiple services share similar names.
+`StandardOutput=journal` and `StandardError=journal` are actually the defaults in modern systemd, so you don't strictly need to specify them. But being explicit makes the service file self-documenting — anyone reading it can immediately see where the logs go. `SyslogIdentifier` sets a short tag attached to every journal entry from this service, making it easy to filter for your specific application even if multiple services share similar names.
 
 ---
 
@@ -50,7 +52,7 @@ journalctl -u my-app.service -p err
 journalctl -u my-app.service -n 50 -r
 ```
 
-The `-b -1` option is particularly valuable for embedded systems. If your device rebooted unexpectedly — perhaps due to a power cut or a kernel panic — you can look at the logs from the *previous* boot to understand what was happening right before it went down.
+The `-b -1` option is particularly valuable for embedded systems. If your device rebooted unexpectedly — a power cut, a kernel panic — you can look at the logs from the *previous* boot to understand what was happening right before it went down.
 
 ---
 
@@ -58,9 +60,7 @@ The `-b -1` option is particularly valuable for embedded systems. If your device
 
 systemd's journal understands syslog-compatible priority levels. If your application logs at different severity levels, you can filter journal output to show only entries at or above a certain severity. The levels from most to least severe are `emerg` (0), `alert` (1), `crit` (2), `err` (3), `warning` (4), `notice` (5), `info` (6), and `debug` (7).
 
-From Python, the easiest way to emit prioritised log entries is with the standard `logging` module. When your service runs under systemd, the `logging` module's output goes to stdout, which the journal captures and stores. If you want the journal to recognise the priority of each entry rather than treating everything as `info`, you can use the `systemd` Python bindings or simply structure your output so that log level appears in the message text — both approaches work fine in practice for most embedded applications.
-
-For most embedded projects, the simplest and most readable approach is:
+For most embedded projects, the simplest and most readable approach is Python's standard `logging` module:
 
 ```python
 import logging
@@ -84,7 +84,7 @@ With this pattern, your log messages are clean and consistent, and you can filte
 
 ## Managing Journal Size on Embedded Devices
 
-This is an important practical concern that most tutorials skip. The Raspberry Pi typically uses an SD card for storage, and SD cards have two relevant limitations: they have finite capacity, and they have a limited number of write cycles before they start to fail. By default, systemd's journal will grow to fill a significant fraction of available disk space — which on a small SD card could be many gigabytes. Leaving the journal unconfigured on an embedded device is a recipe for eventually running out of disk space or unnecessarily wearing out the SD card.
+This is an important practical concern that most tutorials skip. The Raspberry Pi typically uses an SD card for storage, and SD cards have two relevant limitations: finite capacity, and a limited number of write cycles before they start to fail. By default, systemd's journal will grow to fill a significant fraction of available disk space — which on a small SD card could eventually cause problems. Leaving the journal unconfigured on an embedded device is a recipe for running out of disk space or unnecessarily wearing out the SD card.
 
 The journal daemon is configured in `/etc/systemd/journald.conf`. Open it with:
 
@@ -112,9 +112,9 @@ After making changes, restart the journal daemon:
 sudo systemctl restart systemd-journald
 ```
 
-Fifty megabytes is a reasonable upper bound for most edge devices. It is large enough to retain several days of logs at typical verbosity, and small enough to not be a meaningful strain on a 16GB or 32GB SD card. If your application is particularly chatty — logging hundreds of lines per minute — you may want to reduce this further, or adjust your application's log verbosity before reaching for the journal size limit.
+50 megabytes is a reasonable upper bound for most edge devices. It's large enough to retain several days of logs at typical verbosity, and small enough to not strain a 16GB or 32GB SD card. If your application is particularly chatty, you may want to reduce this further, or adjust your application's log verbosity before reaching for the journal size limit.
 
-You can check the current journal disk usage at any time with:
+Check the current journal disk usage at any time with:
 
 ```bash
 journalctl --disk-usage
@@ -124,7 +124,7 @@ journalctl --disk-usage
 
 ## Viewing Logs Without Paging
 
-By default, `journalctl` opens output in a pager (like `less`) which requires you to press `q` to exit. When you are running quick diagnostic commands over SSH, this can be inconvenient. Add `--no-pager` to get plain terminal output that you can scroll or pipe to `grep`:
+By default, `journalctl` opens output in a pager (like `less`) which requires you to press `q` to exit. When running quick diagnostic commands over SSH, this can be inconvenient. Add `--no-pager` to get plain terminal output you can scroll or pipe to `grep`:
 
 ```bash
 # Print all logs without opening a pager

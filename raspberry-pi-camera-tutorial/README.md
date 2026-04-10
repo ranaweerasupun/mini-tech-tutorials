@@ -1,24 +1,27 @@
 # Raspberry Pi Camera Tutorial
 
-A comprehensive, open-source guide to working with the Raspberry Pi Camera using Python and the **Picamera2** library. This tutorial is designed for all skill levels — whether you're wiring up your first camera module or building a computer vision pipeline, there's something here for you.
+[![License: MIT](https://img.shields.io/badge/Code-MIT-blue.svg)](LICENSE)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/Content-CC--BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
+A practical, open-source guide to working with the Raspberry Pi Camera using Python and the **Picamera2** library. We start from physical connection and work through to real projects — time-lapses, motion detection, numpy frame processing, and video recording.
 
 ---
 
 ## What You'll Learn
 
-By the end of this tutorial, you will be able to connect and verify a Pi Camera, control it from Python, understand the full Picamera2 library architecture, and build real-world projects like time-lapses and motion detectors.
+How to connect and verify a Pi Camera, control it from Python, understand the Picamera2 architecture well enough that things stop being mysterious, and build a handful of genuinely useful projects.
 
 ---
 
 ## Tutorial Structure
 
-This tutorial is split into focused documents so you can jump to the section most relevant to your level. If you're brand new, work through them in order. If you have some experience, feel free to skip ahead.
+Work through the documents in order if you're starting fresh. If you have some camera experience already, jump to whatever section is relevant.
 
 | # | Document | What it covers |
 |---|----------|----------------|
-| 01 | [Hardware Setup](docs/01-hardware-setup.md) | Connecting the camera, ribbon cable, enabling the interface, verifying detection |
-| 02 | [Python Camera Basics](docs/02-python-camera-basics.md) | Picamera2 installation, first script, interactive capture, camera controls |
-| 03 | [Picamera2 Architecture](docs/03-picamera2-architecture.md) | Full library architecture, layers, class hierarchy, stream patterns |
+| 01 | [Hardware Setup](docs/01-hardware-setup.md) | Connecting the camera, ribbon cable handling, enabling the interface, verifying detection |
+| 02 | [Python Camera Basics](docs/02-python-camera-basics.md) | Picamera2 installation, first script, camera controls, numpy arrays |
+| 03 | [Picamera2 Architecture](docs/03-picamera2-architecture.md) | The full library architecture — layers, streams, encoders, previews |
 | 04 | [Practical Projects](docs/04-projects.md) | Time-lapse, button-triggered capture, motion detection, video recording |
 | 05 | [Troubleshooting](docs/05-troubleshooting.md) | Common errors, fixes, diagnostic commands |
 
@@ -26,7 +29,7 @@ This tutorial is split into focused documents so you can jump to the section mos
 
 ## Quick Start
 
-If you just want to get a photo captured as fast as possible, here's the minimum you need.
+If you just want a photo captured as fast as possible:
 
 **Step 1 — Connect the camera** (see [Hardware Setup](docs/01-hardware-setup.md))
 
@@ -79,7 +82,7 @@ All standalone, ready-to-run scripts live in the [`code/`](code/) folder:
 ## Tested On
 
 | Hardware | Camera | OS |
-|----------|--------|----|
+|----------|--------|-----|
 | Raspberry Pi 4 Model B | Camera Module 3 | Raspberry Pi OS Bookworm (64-bit) |
 | Raspberry Pi Zero 2 W | Camera Module v2 | Raspberry Pi OS Bullseye (32-bit) |
 
@@ -87,10 +90,16 @@ All standalone, ready-to-run scripts live in the [`code/`](code/) folder:
 
 ## Contributing
 
-Contributions are welcome! If you spot an error, want to add a project, or have a better explanation for something, please open an issue or submit a pull request.
+Contributions are welcome. If you spot an error, want to add a project, or have a better explanation for something, open an issue or submit a pull request.
 
 ---
 
 ## License
 
-This tutorial is released under the [MIT License](LICENSE). All code examples are free to use, modify, and share.
+**Code** (all `.py` files) — [MIT License](LICENSE)
+**Tutorial content** (all `.md` files and written documentation) — [CC BY-NC 4.0](LICENSE)
+
+Code is free to use in your own projects without restriction.
+The written tutorials may be shared and adapted for non-commercial purposes with attribution. They may not be repackaged or sold.
+
+© 2025 [Supun Akalanka Sriyananda]

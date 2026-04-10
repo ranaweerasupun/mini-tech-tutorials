@@ -1,3 +1,4 @@
+# © 2025 [Supun Akalanka Sriyananda] — MIT License
 """
 camera_settings.py
 ------------------
@@ -28,7 +29,7 @@ time.sleep(2)  # Auto-exposure warm-up
 picam2.capture_file("1_normal.jpg")
 print("Saved 1_normal.jpg  (default settings)")
 
-# --- 2. Increased brightness -----
+# --- 2. Increased brightness ---
 # Brightness is a post-processing offset: -1.0 (black) → 0.0 (normal) → 1.0 (white)
 # It does NOT change the sensor exposure — it's applied by the ISP after capture.
 picam2.set_controls({"Brightness": 0.3})
@@ -38,14 +39,14 @@ print("Saved 2_bright.jpg  (Brightness +0.3)")
 
 # --- 3. High contrast (reset brightness first) ---
 # Contrast affects how far apart the shadows and highlights are.
-# 1.0 = normal, higher values = more dramatic, lower = flat/washed out.
+# 1.0 = normal, higher = more dramatic, lower = flat/washed out.
 picam2.set_controls({"Brightness": 0.0, "Contrast": 1.8})
 time.sleep(1)
 picam2.capture_file("3_contrast.jpg")
 print("Saved 3_contrast.jpg  (Contrast 1.8)")
 
-# --- 4. Vivid saturation ----
-# Saturation controls color intensity.
+# --- 4. Vivid saturation ---
+# Saturation controls colour intensity.
 # 1.0 = natural, 0.0 = grayscale, values above 1.0 = increasingly vivid.
 picam2.set_controls({"Contrast": 1.0, "Saturation": 2.0})
 time.sleep(1)

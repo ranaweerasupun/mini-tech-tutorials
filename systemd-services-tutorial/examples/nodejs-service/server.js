@@ -1,9 +1,10 @@
+// © 2025 [Supun Akalanka Sriyananda] — MIT License
 /**
  * server.js
  * ---------
  * A minimal Node.js HTTP server for learning systemd.
  * Responds to every request with the current server time so
- * you can verify it is running by visiting http://<pi-ip>:3000
+ * you can verify it's running by visiting http://<pi-ip>:3000
  * or by running: curl http://localhost:3000
  *
  * The PORT and HOST values are read from environment variables
@@ -34,11 +35,9 @@ const server = http.createServer((req, res) => {
   res.end(message);
 
   // Log to stdout — systemd captures this to the journal automatically.
-  // Using console.log here is equivalent to writing to stdout directly.
   console.log(`[${timestamp}] ${req.method} ${req.url} — responded 200`);
 });
 
-// Start listening.
 server.listen(PORT, HOST, () => {
   console.log(`[${new Date().toISOString()}] Server listening on http://${HOST}:${PORT}`);
 });
@@ -47,8 +46,8 @@ server.listen(PORT, HOST, () => {
 // Graceful shutdown handler
 // -----------------------------------------------------------------------
 // When you run 'systemctl stop', systemd sends SIGTERM to the process
-// before force-killing it. Without this handler, the Node.js process
-// would terminate immediately, potentially dropping in-flight requests.
+// before force-killing it. Without this handler, Node.js would terminate
+// immediately, potentially dropping in-flight requests.
 //
 // This handler tells the HTTP server to stop accepting new connections
 // and waits for existing connections to finish before exiting cleanly.
@@ -59,7 +58,7 @@ process.on("SIGTERM", () => {
 
   server.close(() => {
     console.log(`[${new Date().toISOString()}] All connections closed. Exiting cleanly.`);
-    // Exit with 0 (success) so systemd does not count this as a failure
+    // Exit with 0 (success) so systemd doesn't count this as a failure
     // and trigger an unnecessary restart.
     process.exit(0);
   });
